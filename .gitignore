@@ -106,3 +106,8 @@ InitTestScene*.unity*
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+# Codely CLI personal configuration
+.codely-cli/
+.com-unity-codely.json
+.codelyignore
