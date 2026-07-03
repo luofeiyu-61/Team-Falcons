@@ -1,0 +1,28 @@
+{
+    "name": "UnityTcp.CustomTool",
+    "rootNamespace": "UnityTcp.CustomTool",
+    "references": [
+        "GUID:7d5abdf9527d3f24fae9fffd53879b25",
+        "GUID:0939af519db78b345b6219b59e96546d",
+        "Unity.EditorCoroutines.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "Codely.Newtonsoft.Json.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "cn.tuanjie.ai.generators",
+            "expression": "",
+            "define": "TJGEN_PKG_INSTALLED"
+        }
+    ],
+    "noEngineReferences": false
+}
