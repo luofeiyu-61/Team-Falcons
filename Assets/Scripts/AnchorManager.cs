@@ -6,7 +6,8 @@ public class AnchorManager : MonoBehaviour
 {
     [Header("基础引用")]
     [SerializeField] private Camera gameplayCamera;
-    [SerializeField] private Anchor anchorPrefab;
+    [SerializeField] private Anchor attractAnchorPrefab;
+    [SerializeField] private Anchor repelAnchorPrefab;
 
     [Header("资源限制")]
     [SerializeField] private int startingCharges = 5;
@@ -36,9 +37,36 @@ public class AnchorManager : MonoBehaviour
             gameplayCamera = Camera.main;
     }
 
+    private void OnEnable()
+    {
+        GameEventBus.Subscribe<AnchorModeChangedEvent>(HandleAnchorModeChanged);
+    }
+
+    private void OnDisable()
+    {
+        GameEventBus.Unsubscribe<AnchorModeChangedEvent>(HandleAnchorModeChanged);
+    }
+
     private void Start()
     {
         remainingCharges = startingCharges;
+    }
+
+    // 道具拾取切换锚点模式
+    private void HandleAnchorModeChanged(AnchorModeChangedEvent gameEvent)
+    {
+        if (gameEvent.Mode == AnchorMode.Repel)
+            repelUnlocked = true;
+
+        selectedMode = gameEvent.Mode;
+    }
+
+    // 根据当前模式获取对应 Prefab
+    private Anchor GetActivePrefab()
+    {
+        return selectedMode == AnchorMode.Attract
+            ? attractAnchorPrefab
+            : repelAnchorPrefab;
     }
 
     private void Update()
@@ -65,7 +93,9 @@ public class AnchorManager : MonoBehaviour
 
     private void TryPlaceAnchor()
     {
-        if (anchorPrefab == null)
+        Anchor activePrefab = GetActivePrefab();
+
+        if (activePrefab == null)
             return;
 
         if (remainingCharges < placementCost)
@@ -90,7 +120,7 @@ public class AnchorManager : MonoBehaviour
             return;
 
         Anchor newAnchor = Instantiate(
-            anchorPrefab,
+            activePrefab,
             mouseWorldPosition,
             Quaternion.identity
         );
