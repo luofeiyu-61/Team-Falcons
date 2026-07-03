@@ -19,10 +19,14 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded;
     private float coyoteCounter;
     private float jumpBufferCounter;
+    private Animator animator;
+    private SpriteRenderer sr;
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         controls = new MainCharacter();
+        animator = GetComponent<Animator>();
+        sr = GetComponent<SpriteRenderer>();
     }
     private void OnEnable()
     {
@@ -56,16 +60,33 @@ public class PlayerController : MonoBehaviour
             coyoteCounter = 0f;
             isGrounded = false;  
         }
+
+        if (rb.velocity.x > 0)
+        {
+            sr.flipX = false;
+        }
+        else if (rb.velocity.x < 0)
+        {
+            sr.flipX = true;
+        }
     }
     private void FixedUpdate()
     {
 
         float horizontal = moveInput.x;
         rb.velocity = new Vector2(horizontal * moveSpeed, rb.velocity.y);
+        if (rb.velocity.x != 0) { 
+            animator.SetFloat("Walk", moveSpeed);
+        }
+        else
+        {
+            animator.SetFloat("Walk", 0);
+        }
     }
 
     private void OnJumpPerformed(InputAction.CallbackContext ctx)
     {
+        animator.SetTrigger("Jump");
         jumpBufferCounter = jumpBufferTime;
     }
 
