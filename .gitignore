@@ -116,3 +116,5 @@ InitTestScene*.unity*
 TJGenerators/
 TJGenerators.meta
 /tjgenerators.Editor.csproj
+
+.ai/
