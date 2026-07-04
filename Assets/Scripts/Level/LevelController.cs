@@ -70,9 +70,9 @@ public static class LevelController
         SceneManager.LoadScene(previousIndex);
     }
 
-    // 返回主菜单，默认主菜单放在 Build Index 0
+    // 返回主菜单，按场景名称加载
     public static void LoadMainMenu()
     {
-        LoadLevel(0);
+        LoadLevel("SampleScene");
     }
 }
