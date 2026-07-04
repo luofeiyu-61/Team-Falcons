@@ -142,7 +142,10 @@ public class PlayerController : MonoBehaviour
 
     private void SwitchCamera()
     {
-        virtualCamera1.Priority = 12;
-        virtualCamera2.Priority = 10;
+        if (virtualCamera1 != null && virtualCamera2 != null)
+        {
+            virtualCamera1.Priority = 12;
+            virtualCamera2.Priority = 10;
+        }
     }
 }
