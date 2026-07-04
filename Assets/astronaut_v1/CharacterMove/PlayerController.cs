@@ -82,17 +82,33 @@ public class PlayerController : MonoBehaviour
 
         UpdateFacing(moveInput.x);
     }
+    private AnchorManager anchorManager;
     private float lastPlayerVelocityX;
 
     private void FixedUpdate()
     {
         if (isDead) return;
 
-        // 保留外部力（如 Anchor 斥力）带来的水平速度变化
-        float externalX = rb.velocity.x - lastPlayerVelocityX;
+        if (anchorManager == null)
+            anchorManager = FindObjectOfType<AnchorManager>();
 
         float horizontal = moveInput.x;
-        rb.velocity = new Vector2(horizontal * moveSpeed, rb.velocity.y);
+        bool repelActive = anchorManager != null && anchorManager.HasActiveRepel();
+
+        float targetVelX = horizontal * moveSpeed;
+
+        // 空中且斥力激活：保留外部水平力（锚点推力），避免被玩家输入覆盖
+        // 地面时：直接设置速度，让物理自然处理接触，防止弹跳
+        if (repelActive && !isGrounded)
+        {
+            float externalX = rb.velocity.x - lastPlayerVelocityX;
+            rb.velocity = new Vector2(targetVelX + externalX, rb.velocity.y);
+        }
+        else
+        {
+            rb.velocity = new Vector2(targetVelX, rb.velocity.y);
+        }
+        lastPlayerVelocityX = targetVelX;
         animator.SetFloat("Walk", Mathf.Abs(horizontal) > MoveDeadZone ? moveSpeed : 0f);
     }
 
