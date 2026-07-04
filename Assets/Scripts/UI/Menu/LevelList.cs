@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,23 +12,46 @@ namespace UI.Menu
         public int levelCount;
         public RectTransform center;
         public float radius;
-        
-        private List<Button> buttons;
+
+        [Header("入场动画")]
+        [SerializeField] private float appearDelay = 0.1f;
+        [SerializeField] private float appearDuration = 0.6f;
+        [SerializeField] private float floatHeight = 60f;
+
+        [Header("退场动画")]
+        [SerializeField] private float disappearDelay = 0.08f;
+        [SerializeField] private float disappearDuration = 0.4f;
+
+        private readonly List<Button> buttons = new();
+        private readonly List<RectTransform> buttonRects = new();
+        private readonly List<Vector3> buttonTargetPositions = new();
         private bool initialized;
-        
+        private Coroutine animRoutine;
+
+        private static float EaseOutBack(float t)
+        {
+            const float c1 = 1.70158f;
+            const float c3 = c1 + 1f;
+            return 1f + c3 * Mathf.Pow(t - 1f, 3f) + c1 * Mathf.Pow(t - 1f, 2f);
+        }
+
+        private static float EaseInBack(float t)
+        {
+            const float c1 = 1.70158f;
+            const float c3 = c1 + 1f;
+            return c3 * t * t * t - c1 * t * t;
+        }
+
         private void Awake()
         {
-            buttons = new List<Button>();
+            buttons.Clear();
+            buttonRects.Clear();
+            buttonTargetPositions.Clear();
             // Kill all children created in Scene window
             for (int i = 0; i < transform.childCount; i++)
             {
                 Destroy(transform.GetChild(i).gameObject);
             }
-        }
-
-        private void Start()
-        {
-            
         }
 
         public void ToggleLevelList()
@@ -45,9 +69,20 @@ namespace UI.Menu
         private void ShowLevelList()
         {
             gameObject.SetActive(true);
-            if (initialized)
-                return;
-            
+
+            if (!initialized)
+            {
+                CreateButtons();
+                initialized = true;
+            }
+
+            if (animRoutine != null)
+                StopCoroutine(animRoutine);
+            animRoutine = StartCoroutine(PlayEntranceAnimation());
+        }
+
+        private void CreateButtons()
+        {
             // Semi-circle distribution of buttons（使用局部坐标，兼容 Screen Space - Camera 模式）
             float step = Mathf.PI / (levelCount - 1);
             for (int i = 0; i < levelCount; i++)
@@ -62,17 +97,103 @@ namespace UI.Menu
                 levelButton.transform.localPosition = localPos;
                 levelButton.GetComponent<LevelButton>().Setup(i + 1, backgroundController);
                 buttons.Add(levelButton.GetComponent<Button>());
+                buttonRects.Add(levelButton.GetComponent<RectTransform>());
+                buttonTargetPositions.Add(localPos);
             }
-            
-            if (!initialized)
-                initialized = true;
+        }
+
+        private IEnumerator PlayEntranceAnimation()
+        {
+            SetButtonsInteractable(false);
+
+            // 每个按钮独立动画，通过 appearDelay 实现依次出现
+            var routines = new List<Coroutine>();
+            for (int i = 0; i < buttonRects.Count; i++)
+            {
+                buttonRects[i].localScale = Vector3.zero;
+                routines.Add(StartCoroutine(AnimateButton(buttonRects[i], buttonTargetPositions[i], i)));
+            }
+
+            foreach (var routine in routines)
+                yield return routine;
+
+            SetButtonsInteractable(true);
+            animRoutine = null;
+        }
+
+        private IEnumerator AnimateButton(RectTransform button, Vector3 targetPos, int index)
+        {
+            // 依次出现：每个按钮比前一个延迟 appearDelay
+            yield return new WaitForSeconds(index * appearDelay);
+
+            float elapsed = 0f;
+            while (elapsed < appearDuration)
+            {
+                elapsed += Time.deltaTime;
+                float t = Mathf.Clamp01(elapsed / appearDuration);
+
+                // 缩放：EaseOutBack 带过冲效果
+                button.localScale = Vector3.one * EaseOutBack(t);
+
+                // Y 轴：从下方出现，上浮过冲后回落固定
+                float yOffset = Mathf.Sin(t * Mathf.PI) * floatHeight - (1f - t) * floatHeight;
+                button.localPosition = targetPos + Vector3.up * yOffset;
+
+                yield return null;
+            }
+
+            button.localScale = Vector3.one;
+            button.localPosition = targetPos;
         }
 
         private void HideLevelList()
         {
-            gameObject.SetActive(false);
+            if (animRoutine != null)
+                StopCoroutine(animRoutine);
+            animRoutine = StartCoroutine(PlayExitAnimation());
         }
-        
+
+        private IEnumerator PlayExitAnimation()
+        {
+            SetButtonsInteractable(false);
+
+            // 从后往前依次消失
+            var routines = new List<Coroutine>();
+            for (int i = buttonRects.Count - 1; i >= 0; i--)
+            {
+                routines.Add(StartCoroutine(AnimateButtonExit(buttonRects[i], buttonTargetPositions[i], buttonRects.Count - 1 - i)));
+            }
+
+            foreach (var routine in routines)
+                yield return routine;
+
+            gameObject.SetActive(false);
+            animRoutine = null;
+        }
+
+        private IEnumerator AnimateButtonExit(RectTransform button, Vector3 targetPos, int reverseIndex)
+        {
+            yield return new WaitForSeconds(reverseIndex * disappearDelay);
+
+            float elapsed = 0f;
+            while (elapsed < disappearDuration)
+            {
+                elapsed += Time.deltaTime;
+                float t = Mathf.Clamp01(elapsed / disappearDuration);
+
+                // 缩放：从1缩小到0，EaseInBack 带下冲效果
+                button.localScale = Vector3.one * EaseInBack(1f - t);
+
+                // Y 轴：向下沉后消失
+                float yOffset = Mathf.Sin(t * Mathf.PI) * floatHeight * 0.5f + t * floatHeight * 0.5f;
+                button.localPosition = targetPos - Vector3.up * yOffset;
+
+                yield return null;
+            }
+
+            button.localScale = Vector3.zero;
+        }
+
         public void SetButtonsInteractable(bool interactable)
         {
             foreach (var button in buttons)
