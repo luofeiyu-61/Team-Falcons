@@ -873,6 +873,8 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 8
+  pickupSound: {fileID: 0}
+  pickupSoundVolume: 1
 --- !u!212 &719850604
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1314,6 +1316,8 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 8
+  pickupSound: {fileID: 0}
+  pickupSoundVolume: 1
 --- !u!212 &1071253627
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6710,7 +6714,7 @@ TilemapCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
+  m_UsedByComposite: 1
   m_Offset: {x: 0, y: 0}
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0
@@ -6752,9 +6756,47 @@ CompositeCollider2D:
   m_GeometryType: 0
   m_GenerationType: 0
   m_EdgeRadius: 0
-  m_ColliderPaths: []
+  m_ColliderPaths:
+  - m_Collider: {fileID: 1631761399}
+    m_ColliderPaths:
+    - - X: 140000000
+        Y: -100000000
+      - X: 40000000
+        Y: -100000000
+      - X: 40000000
+        Y: -20000000
+      - X: -40000000
+        Y: -20000000
+      - X: -40000000
+        Y: -100000000
+      - X: -150000000
+        Y: -100000000
+      - X: -150000000
+        Y: -20000000
+      - X: -230000000
+        Y: -20000000
+      - X: -230000000
+        Y: -160000000
+      - X: 210000000
+        Y: -160000000
+      - X: 210000000
+        Y: -20000000
+      - X: 140000000
+        Y: -20000000
   m_CompositePaths:
-    m_Paths: []
+    m_Paths:
+    - - {x: 20.999971, y: -16}
+      - {x: 20.999971, y: -2}
+      - {x: 14, y: -2.0000293}
+      - {x: 13.999971, y: -10}
+      - {x: 4, y: -9.99997}
+      - {x: 3.999971, y: -2}
+      - {x: -4, y: -2.0000293}
+      - {x: -4.0000296, y: -10}
+      - {x: -15, y: -9.99997}
+      - {x: -15.000029, y: -2}
+      - {x: -23, y: -2.0000293}
+      - {x: -22.999971, y: -16}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
 --- !u!1001 &1814640571
