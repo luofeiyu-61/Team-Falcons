@@ -117,4 +117,6 @@ TJGenerators/
 TJGenerators.meta
 /tjgenerators.Editor.csproj
 
+# Codely Client Configurations
 .ai/
+screenshots/

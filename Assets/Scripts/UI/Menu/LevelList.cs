@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Menu
 {
@@ -10,10 +12,12 @@ namespace UI.Menu
         public RectTransform center;
         public float radius;
         
+        private List<Button> buttons;
         private bool initialized;
         
         private void Awake()
         {
+            buttons = new List<Button>();
             // Kill all children created in Scene window
             for (int i = 0; i < transform.childCount; i++)
             {
@@ -37,35 +41,44 @@ namespace UI.Menu
                 ShowLevelList();
             }
         }
-        
-        public void ShowLevelList()
+
+        private void ShowLevelList()
         {
             gameObject.SetActive(true);
             if (initialized)
                 return;
             
-            // Semi-circle distribution of buttons
+            // Semi-circle distribution of buttons（使用局部坐标，兼容 Screen Space - Camera 模式）
             float step = Mathf.PI / (levelCount - 1);
             for (int i = 0; i < levelCount; i++)
             {
                 float angle = Mathf.PI + step * i;
-                Vector3 position = new Vector3(
-                    center.position.x + radius * Mathf.Cos(angle),
-                    center.position.y + radius * Mathf.Sin(angle),
-                    center.position.z
+                Vector3 localPos = new Vector3(
+                    center.localPosition.x + radius * Mathf.Cos(angle),
+                    center.localPosition.y + radius * Mathf.Sin(angle),
+                    center.localPosition.z
                 );
-                var levelButton = Instantiate(levelButtonPrefab, position, Quaternion.identity);
+                var levelButton = Instantiate(levelButtonPrefab, transform, false);
+                levelButton.transform.localPosition = localPos;
                 levelButton.GetComponent<LevelButton>().Setup(i + 1, backgroundController);
-                levelButton.transform.SetParent(transform, true);
+                buttons.Add(levelButton.GetComponent<Button>());
             }
             
             if (!initialized)
                 initialized = true;
         }
 
-        public void HideLevelList()
+        private void HideLevelList()
         {
             gameObject.SetActive(false);
+        }
+        
+        public void SetButtonsInteractable(bool interactable)
+        {
+            foreach (var button in buttons)
+            {
+                button.interactable = interactable;
+            }
         }
     }
 }
