@@ -111,12 +111,13 @@ InitTestScene*.unity*
 .codely-cli/
 .com-unity-codely.json
 .codelyignore
+.codely/
 
 # TJGenerators local/generated files
 TJGenerators/
 TJGenerators.meta
 /tjgenerators.Editor.csproj
 
+# Codely Client Configurations
 .ai/
-.codely/clipboard/clipboard-1783163312356.png
-.codely/clipboard/clipboard-1783163301319.png
+screenshots/
