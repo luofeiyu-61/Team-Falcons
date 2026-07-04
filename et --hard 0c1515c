@@ -1,0 +1,111 @@
+*   [33mcce2ed1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mKomeiji[m[33m)[m Merge branch 'main' of https://github.com/luofeiyu-61/Team-Falcons into Komeiji
+[31m|[m[32m\[m  
+[31m|[m *   [33m993a653[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge pull request #32 from luofeiyu-61/Komeiji
+[31m|[m [33m|[m[34m\[m  
+[31m|[m [33m|[m *   [33mac5c271[m Merge branch 'main' into Komeiji
+[31m|[m [33m|[m [35m|[m[33m\[m  
+[31m|[m [33m|[m [35m|[m[33m/[m  
+[31m|[m [33m|[m[33m/[m[35m|[m   
+[31m|[m * [35m|[m   [33m04b1abd[m Merge pull request #31 from luofeiyu-61/dulao
+[31m|[m [1;31m|[m[1;32m\[m [35m\[m  
+[31m|[m [1;31m|[m * [35m\[m   [33md7b39bc[m Merge branch 'main' into dulao
+[31m|[m [1;31m|[m [1;33m|[m[1;31m\[m [35m\[m  
+[31m|[m [1;31m|[m [1;33m|[m[1;31m/[m [35m/[m  
+[31m|[m [1;31m|[m[1;31m/[m[1;33m|[m [35m|[m   
+[31m|[m * [1;33m|[m [35m|[m   [33mcd807a7[m Merge pull request #30 from luofeiyu-61/ciallo
+[31m|[m [1;35m|[m[1;36m\[m [1;33m\[m [35m\[m  
+[31m|[m [1;35m|[m * [1;33m|[m [35m|[m [33m47cfb28[m feat: add Level8
+[31m|[m [1;35m|[m * [1;33m|[m [35m|[m [33m814eae3[m ciallo
+[31m|[m * [1;36m|[m [1;33m|[m [35m|[m [33meba3d62[m Add tags: InGame, Menu
+[31m|[m * [1;36m|[m [1;33m|[m [35m|[m   [33m188385b[m Merge branch 'main' into ui
+[31m|[m [31m|[m[32m\[m [1;36m\[m [1;33m\[m [35m\[m  
+[31m|[m [31m|[m * [1;36m\[m [1;33m\[m [35m\[m   [33m6a11c84[m Merge pull request #29 from luofeiyu-61/Komeiji
+[31m|[m [31m|[m [33m|[m[34m\[m [1;36m\[m [1;33m\[m [35m\[m  
+[31m|[m [31m|[m * [34m\[m [1;36m\[m [1;33m\[m [35m\[m   [33m88d84ea[m Merge pull request #28 from luofeiyu-61/ciallo
+[31m|[m [31m|[m [35m|[m[1;36m\[m [34m\[m [1;36m\[m [1;33m\[m [35m\[m  
+[31m|[m [31m|[m [35m|[m [1;36m|[m [34m|[m[1;36m/[m [1;33m/[m [35m/[m  
+[31m|[m [31m|[m [35m|[m [1;36m|[m[1;36m/[m[34m|[m [1;33m|[m [35m|[m   
+[31m|[m [31m|[m [35m|[m * [34m|[m [1;33m|[m [35m|[m [33m2b193aa[m ciallo
+[31m|[m * [35m|[m [36m|[m [34m|[m [1;33m|[m [35m|[m [33m3ae6e9a[m 重构Scene，现在入口是Entry！
+[31m|[m [36m|[m [35m|[m [36m|[m [34m|[m * [35m|[m [33md336b98[m 第三和四关完成
+* [36m|[m [35m|[m [36m|[m [34m|[m [36m|[m [35m|[m [33m0c1515c[m 11
+* [36m|[m [35m|[m [36m|[m [34m|[m [36m|[m [35m|[m [33m055d94e[m 22222
+[35m|[m [36m|[m[35m_[m[35m|[m[35m_[m[36m|[m[35m_[m[34m|[m[35m_[m[36m|[m[35m/[m  
+[35m|[m[35m/[m[36m|[m [35m|[m [36m|[m [34m|[m [36m|[m   
+* [36m|[m [35m|[m [36m|[m [34m|[m [36m|[m [33m958d89b[m[33m ([m[1;31morigin/Komeiji[m[33m)[m 1111111
+[34m|[m [36m|[m[34m_[m[35m|[m[34m_[m[36m|[m[34m/[m [36m/[m  
+[34m|[m[34m/[m[36m|[m [35m|[m [36m|[m [36m|[m   
+* [36m|[m [35m|[m [36m|[m [36m|[m [33md55821c[m 9999
+[35m|[m [36m|[m[35m/[m [36m/[m [36m/[m  
+[35m|[m[35m/[m[36m|[m [36m|[m [36m|[m   
+* [36m|[m [36m|[m [36m|[m   [33m0270684[m Merge pull request #27 from luofeiyu-61/Komeiji
+[36m|[m[1;32m\[m [36m\[m [36m\[m [36m\[m  
+[36m|[m [1;32m|[m[36m_[m[36m|[m[36m/[m [36m/[m  
+[36m|[m[36m/[m[1;32m|[m [36m|[m [36m|[m   
+[36m|[m * [36m|[m [36m|[m [33m3013501[m 8888
+[36m|[m * [36m|[m [36m|[m [33mb559515[m 777777
+* [1;32m|[m [36m|[m [36m|[m [33m1ce114c[m Laser
+* [1;32m|[m [36m|[m [36m|[m   [33mac60192[m Merge pull request #25 from luofeiyu-61/dulao
+[1;33m|[m[36m\[m [1;32m\[m [36m\[m [36m\[m  
+[1;33m|[m [36m|[m [1;32m|[m[36m_[m[36m|[m[36m/[m  
+[1;33m|[m [36m|[m[36m/[m[1;32m|[m [36m|[m   
+[1;33m|[m * [1;32m|[m [36m|[m [33m316d1aa[m 2
+[1;33m|[m * [1;32m|[m [36m|[m   [33ma300645[m Merge branch 'main' into dulao
+[1;33m|[m [1;35m|[m[1;36m\[m [1;32m\[m [36m\[m  
+* [1;35m|[m [1;36m|[m [1;32m|[m [36m|[m [33mee04a72[m Merge pull request #24 from luofeiyu-61/dulao
+[1;36m|[m[1;35m\[m[1;35m|[m [1;36m|[m [1;32m|[m [36m|[m 
+[1;36m|[m [1;35m|[m[1;36m/[m [1;32m/[m [36m/[m  
+[1;36m|[m[1;36m/[m[1;35m|[m [1;32m|[m [36m|[m   
+[1;36m|[m * [1;32m|[m [36m|[m [33m9423091[m 123
+[1;36m|[m [1;32m|[m[1;32m/[m [36m/[m  
+* [1;32m|[m [36m|[m   [33m3e260d6[m Merge pull request #23 from luofeiyu-61/rytukim
+[1;32m|[m[34m\[m [1;32m\[m [36m\[m  
+[1;32m|[m [34m|[m[1;32m/[m [36m/[m  
+[1;32m|[m[1;32m/[m[34m|[m [36m|[m   
+[1;32m|[m * [36m|[m   [33mf0f6f29[m Merge branch 'main' into rytukim
+[1;32m|[m [35m|[m[1;32m\[m [36m\[m  
+[1;32m|[m [35m|[m[1;32m/[m [36m/[m  
+[1;32m|[m[1;32m/[m[35m|[m [36m|[m   
+* [35m|[m [36m|[m   [33m6ba1437[m Merge branch 'main' into dulao
+[1;31m|[m[1;32m\[m [35m\[m [36m\[m  
+[1;31m|[m * [35m\[m [36m\[m   [33mff8d665[m Merge pull request #22 from luofeiyu-61/Komeiji
+[1;31m|[m [1;33m|[m[1;34m\[m [35m\[m [36m\[m  
+[1;31m|[m [1;33m|[m * [35m|[m [36m|[m [33m2109cfd[m 6666666
+* [1;33m|[m [1;34m|[m [35m|[m [36m|[m [33me5fceac[m Merge branch 'main' into dulao
+[1;35m|[m[1;33m\[m[1;33m|[m [1;34m|[m [35m|[m [36m|[m 
+[1;35m|[m * [1;34m|[m [35m|[m [36m|[m [33m5562e38[m feat: refactor death to scene reload, right-click clears all anchors, R to restart, repel vortex shader, dust vfx fix
+[1;35m|[m * [1;34m|[m [35m|[m [36m|[m   [33m1e47df6[m Merge branch 'main' of https://github.com/luofeiyu-61/Team-Falcons
+[1;35m|[m [31m|[m[36m\[m [1;34m\[m [35m\[m [36m\[m  
+[1;35m|[m [31m|[m [36m|[m [1;34m|[m[36m_[m[35m|[m[36m/[m  
+[1;35m|[m [31m|[m [36m|[m[36m/[m[1;34m|[m [35m|[m   
+[1;35m|[m [31m|[m * [1;34m|[m [35m|[m   [33mc7ec2b0[m Merge pull request #21 from luofeiyu-61/ui
+[1;35m|[m [31m|[m [1;34m|[m[34m\[m [1;34m\[m [35m\[m  
+[1;35m|[m [31m|[m [1;34m|[m [34m|[m[1;34m/[m [35m/[m  
+[1;35m|[m [31m|[m [1;34m|[m[1;34m/[m[34m|[m [35m|[m   
+[1;35m|[m [31m|[m [1;34m|[m * [35m|[m   [33mc141080[m Merge branch 'main' into ui
+[1;35m|[m [31m|[m [1;34m|[m [35m|[m[1;34m\[m [35m\[m  
+[1;35m|[m [31m|[m [1;34m|[m [35m|[m[1;34m/[m [35m/[m  
+[1;35m|[m [31m|[m [1;34m|[m[1;34m/[m[35m|[m [35m|[m   
+[1;35m|[m [31m|[m [1;34m|[m * [35m|[m [33m5babcfa[m[33m ([m[1;31morigin/ui[m[33m)[m 动画大更新！+GameObjectManager生命周期管理
+[1;35m|[m [31m|[m [1;34m|[m * [35m|[m [33m21787de[m Menu 基本完成, clean up
+[1;35m|[m * [1;34m|[m [36m|[m [35m|[m [33mde173bc[m ciallo
+[1;35m|[m [1;34m|[m[1;34m/[m [36m/[m [35m/[m  
+* [1;34m|[m [36m|[m [35m|[m [33m4877d7f[m 1
+[36m|[m [1;34m|[m [36m|[m * [33m2c74c60[m buttonlaserplatform
+[36m|[m [1;34m|[m [36m|[m * [33mfb30c5b[m feat: refactor death to scene reload, right-click clears all anchors, R to restart, repel vortex shader, dust vfx fix
+[36m|[m [1;34m|[m [36m|[m[1;34m/[m  
+[36m|[m [1;34m|[m[1;34m/[m[36m|[m   
+[36m|[m * [36m|[m   [33m2556fd2[m[33m ([m[1;31morigin/rytukim[m[33m)[m Merge pull request #20 from luofeiyu-61/dulao
+[36m|[m [1;31m|[m[36m\[m [36m\[m  
+[36m|[m [1;31m|[m[36m/[m [36m/[m  
+[36m|[m[36m/[m[1;31m|[m [36m|[m   
+* [1;31m|[m [36m|[m [33m33c06da[m[33m ([m[1;31morigin/dulao[m[33m)[m Update Level2.unity
+* [1;31m|[m [36m|[m [33m3339937[m Merge branch 'main' into dulao
+[1;33m|[m[1;31m\[m[1;31m|[m [36m|[m 
+[1;33m|[m * [36m|[m   [33m1135959[m Merge pull request #19 from luofeiyu-61/Komeiji
+[1;33m|[m [1;35m|[m[1;36m\[m [36m\[m  
+[1;33m|[m [1;35m|[m * [36m\[m   [33m5d0c9af[m Merge branch 'main' into Komeiji
+[1;33m|[m [1;35m|[m [31m|[m[1;35m\[m [36m\[m  
+[1;33m|[m [1;35m|[m [31m|[m[1;35m/[m [36m/[m  
+[1;33m|[m [1;35m|[m[1;35m/[m[31m|[m [36m|[m   
+[1;33m|[m * [31m|[m [36m|[m   [33m0cfed65[m Merge pull request #18 
