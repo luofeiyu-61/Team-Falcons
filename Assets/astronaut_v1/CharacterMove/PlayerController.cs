@@ -86,13 +86,22 @@ public class PlayerController : MonoBehaviour
             sr.flipX = true;
         }
     }
+    private float lastPlayerVelocityX;
+
     private void FixedUpdate()
     {
         if (isDead) return;
 
+        // 保留外部力（如 Anchor 斥力）带来的水平速度变化
+        float externalX = rb.velocity.x - lastPlayerVelocityX;
+
         float horizontal = moveInput.x;
-        rb.velocity = new Vector2(horizontal * moveSpeed, rb.velocity.y);
-        if (rb.velocity.x != 0) { 
+        float targetVelX = horizontal * moveSpeed;
+        lastPlayerVelocityX = targetVelX;
+
+        rb.velocity = new Vector2(targetVelX + externalX, rb.velocity.y);
+
+        if (rb.velocity.x != 0) {
             animator.SetFloat("Walk", moveSpeed);
         }
         else
