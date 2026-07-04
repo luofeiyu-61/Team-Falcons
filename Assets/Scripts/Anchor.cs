@@ -100,7 +100,7 @@ public class Anchor : MonoBehaviour
         // Trigger 检测
         CircleCollider2D col = holeObj.AddComponent<CircleCollider2D>();
         col.isTrigger = true;
-        col.radius = 0.5f;
+        col.radius = 2f;
 
         // 挂载 BlackHole 脚本
         holeObj.AddComponent<BlackHole>();
