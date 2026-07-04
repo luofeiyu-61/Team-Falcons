@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5203719689247514083}
   - component: {fileID: 5203719689247514082}
   - component: {fileID: 5203719689247514081}
+  - component: {fileID: 8244750305851126991}
   m_Layer: 7
   m_Name: Vortex
   m_TagString: Untagged
@@ -121,3 +122,19 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 8
+--- !u!58 &8244750305851126991
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5203719689247514077}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
