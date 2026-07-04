@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +23,9 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
     private SpriteRenderer sr;
     private bool isDead = false;
+    [Header("Virtual Camera")]
+    public CinemachineVirtualCamera virtualCamera1;
+    public CinemachineVirtualCamera virtualCamera2;
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -44,6 +48,12 @@ public class PlayerController : MonoBehaviour
         controls.player.Jump.performed -= OnJumpPerformed;
         controls.player.Jump.canceled -= OnJumpCanceled;
         controls.player.Disable();
+    }
+
+    void Start()
+    {
+        Invoke("SwitchCamera", 3f);
+
     }
     private void Update()
     {
@@ -128,5 +138,11 @@ public class PlayerController : MonoBehaviour
         isDead = false;
         animator.ResetTrigger("dead");
         animator.Play("breath", 0, 0f);
+    }
+
+    private void SwitchCamera()
+    {
+        virtualCamera1.Priority = 12;
+        virtualCamera2.Priority = 10;
     }
 }
