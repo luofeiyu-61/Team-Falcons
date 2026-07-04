@@ -47,6 +47,13 @@ public class Laser : MonoBehaviour
             return;
         }
 
+        // 碰到地面：直接销毁激光
+        if (other.CompareTag("Ground"))
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         // 碰到 ShootButton：激活按钮，然后销毁激光
         if (other.CompareTag(buttonTag))
         {
