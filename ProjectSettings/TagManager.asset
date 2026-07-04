@@ -7,6 +7,8 @@ TagManager:
   - Ground
   - Button
   - Gravitable
+  - InGame
+  - Menu
   layers:
   - Default
   - TransparentFX
