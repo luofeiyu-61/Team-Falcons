@@ -106,6 +106,7 @@ public class PlayerController : MonoBehaviour
         if (isDead) return;
         animator.SetTrigger("Jump");
         jumpBufferCounter = jumpBufferTime;
+        Debug.Log("good jump");
     }
 
     private void OnJumpCanceled(InputAction.CallbackContext ctx)
