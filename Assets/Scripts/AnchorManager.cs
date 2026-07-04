@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UI.InGame;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -25,11 +26,29 @@ public class AnchorManager : MonoBehaviour
     private int attractCharges;
     private int repelCharges;
     private bool repelUnlocked = false;
+    private BatterySlots batterySlots;
 
     private readonly List<Anchor> activeAnchors = new();
 
-    public int AttractCharges => attractCharges;
-    public int RepelCharges => repelCharges;
+    public int AttractCharges
+    {
+        get => attractCharges;
+        private set
+        {
+            attractCharges = value;
+            batterySlots.BlueCount = attractCharges;
+        }
+    }
+    public int RepelCharges
+    {
+        get => repelCharges;
+        private set
+        {
+            repelCharges = value;
+            batterySlots.RedCount = repelCharges;
+        }
+    }
+    
     public int RemainingCharges => selectedMode == AnchorMode.Attract
         ? attractCharges
         : repelCharges;
@@ -53,9 +72,11 @@ public class AnchorManager : MonoBehaviour
 
     private void Start()
     {
+        if (batterySlots == null)
+            batterySlots = GameObject.Find("BatterySlots").GetComponent<BatterySlots>();
         // 初始额度为零，需要拾取道具才能获得
-        attractCharges = 0;
-        repelCharges = 0;
+        AttractCharges = 0;
+        RepelCharges = 0;
     }
 
     // 道具拾取：切换模式并增加对应额度
@@ -67,26 +88,26 @@ public class AnchorManager : MonoBehaviour
         selectedMode = gameEvent.Mode;
 
         if (gameEvent.Mode == AnchorMode.Attract)
-            attractCharges += gameEvent.ChargeAmount;
+            AttractCharges += gameEvent.ChargeAmount;
         else
-            repelCharges += gameEvent.ChargeAmount;
+            RepelCharges += gameEvent.ChargeAmount;
     }
 
     // 获取当前模式可用额度
     private int GetRemainingCharges()
     {
         return selectedMode == AnchorMode.Attract
-            ? attractCharges
-            : repelCharges;
+            ? AttractCharges
+            : RepelCharges;
     }
 
     // 扣除当前模式额度
     private void SpendCharge()
     {
         if (selectedMode == AnchorMode.Attract)
-            attractCharges -= placementCost;
+            AttractCharges -= placementCost;
         else
-            repelCharges -= placementCost;
+            RepelCharges -= placementCost;
     }
 
     // 根据当前模式获取对应 Prefab
@@ -169,9 +190,9 @@ public class AnchorManager : MonoBehaviour
                 if (refundWhenRemoved)
                 {
                     if (anchor.GetMode() == AnchorMode.Attract)
-                        attractCharges += placementCost;
+                        AttractCharges += placementCost;
                     else
-                        repelCharges += placementCost;
+                        RepelCharges += placementCost;
                 }
 
                 Destroy(anchor.gameObject);
