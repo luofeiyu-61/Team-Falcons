@@ -100,10 +100,10 @@ MonoBehaviour:
   extendSpeed: 2
   maxLength: 3
   minLength: 0.5
-  rodWidth: 0.4
+  rodWidth: 1
   head: {fileID: 8118493643064161301}
-  headSize: 0.8
-  headThickness: 0.3
+  headSize: 2
+  headThickness: 1
 --- !u!1 &719781006288780706
 GameObject:
   m_ObjectHideFlags: 0
