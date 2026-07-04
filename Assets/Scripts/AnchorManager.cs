@@ -18,7 +18,6 @@ public class AnchorManager : MonoBehaviour
     [SerializeField] private LayerMask anchorLayer;
     [SerializeField] private LayerMask blockedLayer;
     [SerializeField] private float placementClearRadius = 0.25f;
-    [SerializeField] private float removeRadius = 1.5f;
 
     [Header("锚点模式")]
     [SerializeField] private AnchorMode selectedMode = AnchorMode.Attract;
@@ -162,43 +161,24 @@ public class AnchorManager : MonoBehaviour
 
     private void TryRemoveAnchor()
     {
-        Vector2 mouseWorldPosition = GetMouseWorldPosition();
-
-        // 在 removeRadius 范围内找最近的 Anchor
-        Anchor closest = null;
-        float closestDist = removeRadius;
-
+        // 右键一次销毁所有已放置的 Anchor
         foreach (Anchor anchor in activeAnchors)
         {
-            if (anchor == null)
-                continue;
-
-            float dist = Vector2.Distance(
-                mouseWorldPosition,
-                anchor.transform.position
-            );
-
-            if (dist < closestDist)
+            if (anchor != null)
             {
-                closestDist = dist;
-                closest = anchor;
+                if (refundWhenRemoved)
+                {
+                    if (anchor.GetMode() == AnchorMode.Attract)
+                        attractCharges += placementCost;
+                    else
+                        repelCharges += placementCost;
+                }
+
+                Destroy(anchor.gameObject);
             }
         }
 
-        if (closest == null)
-            return;
-
-        activeAnchors.Remove(closest);
-
-        if (refundWhenRemoved)
-        {
-            if (closest.GetMode() == AnchorMode.Attract)
-                attractCharges += placementCost;
-            else
-                repelCharges += placementCost;
-        }
-
-        Destroy(closest.gameObject);
+        activeAnchors.Clear();
     }
 
     private Vector2 GetMouseWorldPosition()
