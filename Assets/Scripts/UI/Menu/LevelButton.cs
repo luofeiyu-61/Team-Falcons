@@ -22,7 +22,7 @@ namespace UI.Menu
 
         public void OnLevelButtonClicked()
         {
-            backgroundController.MosaicBackground(false);
+            backgroundController.SelectLevel(level);
         }
     }
 }

@@ -1,5 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace UI.Menu
@@ -8,6 +10,7 @@ namespace UI.Menu
     {
         [SerializeField] private List<Image> backgrounds = new();
         [SerializeField] private List<MosaicBlurTransitionEffect> transitionEffects = new();
+        [SerializeField] private LevelList levelList;
 
         private bool blur = false;
         
@@ -46,15 +49,35 @@ namespace UI.Menu
             }
         }
 
-        public void MosaicBackground(bool reverse = false)
+        public void MosaicBackground(bool reverse = false, UnityAction<(bool blur, bool reverse)> callback = null)
         {
             foreach (var effect in transitionEffects)
             {
                 if (reverse)
-                    effect.PlayMosaicReverse();
+                    effect.PlayMosaicReverse(callback);
                 else
-                    effect.PlayMosaicForward();
+                    effect.PlayMosaicForward(callback);
             }
+        }
+
+        public void SelectLevel(int level)
+        {
+            levelList.SetButtonsInteractable(false);
+            MosaicBackground(false, animationInfo =>
+            {
+                if (!animationInfo.blur && !animationInfo.reverse)
+                {
+                    StartCoroutine(ChangeSceneMaskingAnimation(level));
+                }
+            });
+        }
+
+        private IEnumerator ChangeSceneMaskingAnimation(int level)
+        {
+            var maskEffect = Camera.main!.GetComponent<CircleMaskCameraEffect>();
+            maskEffect.PlayForward();
+            yield return new WaitForSeconds(maskEffect.duration);
+            LevelController.LoadLevel(level);
         }
     }
 }
