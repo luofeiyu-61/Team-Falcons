@@ -181,6 +181,8 @@ public class LevelManager : MonoBehaviour
         );
 
         Debug.Log($"第 {levelIndex} 关通关");
+
+        LevelController.LoadNextLevel();
     }
 
     public void RestartCurrentLevel()
