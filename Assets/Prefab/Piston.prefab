@@ -97,12 +97,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7cf16b6b0706774aa1c2b77768d71ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  extendSpeed: 2
-  maxLength: 3
+  extendSpeed: 3
+  maxLength: 10
   minLength: 0.5
   rodWidth: 1
   head: {fileID: 8118493643064161301}
-  headSize: 2
+  headSize: 1.5
   headThickness: 1
 --- !u!1 &719781006288780706
 GameObject:
