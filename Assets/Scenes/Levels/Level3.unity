@@ -546,6 +546,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1508070215}
   - component: {fileID: 1508070214}
+  - component: {fileID: 1508070216}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -584,3 +585,30 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1508070216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1508070213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec89c31be7e9c6c4fbd7046f7460d32f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameplayCamera: {fileID: 1228423114}
+  attractAnchorPrefab: {fileID: 5203719689247514081, guid: 06010b4fae3a5d84c9cccf8c1e3deeb4, type: 3}
+  repelAnchorPrefab: {fileID: 7835544658520123351, guid: b0eb7f47970c9334da1c6fa1b259cba7, type: 3}
+  startingCharges: 5
+  placementCost: 1
+  maxActiveAnchors: 3
+  refundWhenRemoved: 0
+  anchorLayer:
+    serializedVersion: 2
+    m_Bits: 2147483647
+  blockedLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  placementClearRadius: 0.25
+  selectedMode: 0
