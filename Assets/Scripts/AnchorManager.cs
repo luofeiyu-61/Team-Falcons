@@ -12,8 +12,12 @@ public class AnchorManager : MonoBehaviour
 
     [Header("资源限制")]
     [SerializeField] private int placementCost = 1;
-    [SerializeField] private int maxActiveAnchors = 3;
+    [SerializeField] private int maxActiveAnchors = 1;
     [SerializeField] private bool refundWhenRemoved = false;
+
+    [Header("持有上限")]
+    [SerializeField] private int maxAttractCharges = 99;
+    [SerializeField] private int maxRepelCharges = 99;
 
     [Header("放置限制")]
     [SerializeField] private LayerMask anchorLayer;
@@ -25,6 +29,7 @@ public class AnchorManager : MonoBehaviour
 
     private int attractCharges;
     private int repelCharges;
+    private bool attractUnlocked = false;
     private bool repelUnlocked = false;
     private BatterySlots batterySlots;
 
@@ -74,23 +79,30 @@ public class AnchorManager : MonoBehaviour
     {
         if (batterySlots == null)
             batterySlots = GameObject.Find("BatterySlots").GetComponent<BatterySlots>();
+
+        // 同步 UI 最大显示值与持有上限
+        batterySlots.MaxCount = Mathf.Max(maxAttractCharges, maxRepelCharges);
+
         // 初始额度为零，需要拾取道具才能获得
         AttractCharges = 0;
         RepelCharges = 0;
     }
 
-    // 道具拾取：切换模式并增加对应额度
+    // 道具拾取：切换模式并增加对应额度（不超过上限）
     private void HandleAnchorModeChanged(AnchorModeChangedEvent gameEvent)
     {
-        if (gameEvent.Mode == AnchorMode.Repel)
+        if (gameEvent.Mode == AnchorMode.Attract)
+        {
+            attractUnlocked = true;
+            AttractCharges = Mathf.Min(AttractCharges + gameEvent.ChargeAmount, maxAttractCharges);
+        }
+        else
+        {
             repelUnlocked = true;
+            RepelCharges = Mathf.Min(RepelCharges + gameEvent.ChargeAmount, maxRepelCharges);
+        }
 
         selectedMode = gameEvent.Mode;
-
-        if (gameEvent.Mode == AnchorMode.Attract)
-            AttractCharges += gameEvent.ChargeAmount;
-        else
-            RepelCharges += gameEvent.ChargeAmount;
     }
 
     // 获取当前模式可用额度
@@ -127,6 +139,15 @@ public class AnchorManager : MonoBehaviour
             EventSystem.current.IsPointerOverGameObject())
         {
             return;
+        }
+
+        // E 键切换模式
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (selectedMode == AnchorMode.Attract && repelUnlocked)
+                selectedMode = AnchorMode.Repel;
+            else if (selectedMode == AnchorMode.Repel && attractUnlocked)
+                selectedMode = AnchorMode.Attract;
         }
 
         if (Input.GetMouseButtonDown(0))
@@ -182,14 +203,18 @@ public class AnchorManager : MonoBehaviour
 
     private void TryRemoveAnchor()
     {
+        AnchorMode removedMode = AnchorMode.Attract;
+
         // 右键一次销毁所有已放置的 Anchor
         foreach (Anchor anchor in activeAnchors)
         {
             if (anchor != null)
             {
+                removedMode = anchor.GetMode();
+
                 if (refundWhenRemoved)
                 {
-                    if (anchor.GetMode() == AnchorMode.Attract)
+                    if (removedMode == AnchorMode.Attract)
                         AttractCharges += placementCost;
                     else
                         RepelCharges += placementCost;
@@ -200,6 +225,12 @@ public class AnchorManager : MonoBehaviour
         }
 
         activeAnchors.Clear();
+
+        // 撤销锚点后自动切枪：当前模式没余额时才切到另一边
+        if (selectedMode == AnchorMode.Attract && AttractCharges == 0 && repelUnlocked && RepelCharges > 0)
+            selectedMode = AnchorMode.Repel;
+        else if (selectedMode == AnchorMode.Repel && RepelCharges == 0 && attractUnlocked && AttractCharges > 0)
+            selectedMode = AnchorMode.Attract;
     }
 
     private Vector2 GetMouseWorldPosition()
@@ -220,6 +251,17 @@ public class AnchorManager : MonoBehaviour
     public void UnlockRepel()
     {
         repelUnlocked = true;
+    }
+
+    /// 当前是否存在活跃的斥力锚点
+    public bool HasActiveRepel()
+    {
+        foreach (Anchor anchor in activeAnchors)
+        {
+            if (anchor != null && anchor.GetMode() == AnchorMode.Repel)
+                return true;
+        }
+        return false;
     }
 
     // 可绑定 UI 按钮
