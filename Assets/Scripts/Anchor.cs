@@ -50,19 +50,19 @@ public class Anchor : MonoBehaviour
         lineObj.transform.SetParent(transform, false);
 
         radiusLine = lineObj.AddComponent<LineRenderer>();
-        radiusLine.useWorldSpace = false;
+        radiusLine.useWorldSpace = true;
         radiusLine.loop = true;
         radiusLine.widthMultiplier = 0.05f;
         radiusLine.sortingOrder = 10;
 
-        // 64 个点拼成圆
+        // 64 个点拼成圆（世界坐标，不受父物体缩放影响）
         int segments = 64;
         radiusLine.positionCount = segments;
         Vector3[] points = new Vector3[segments];
         for (int i = 0; i < segments; i++)
         {
             float angle = (float)i / segments * Mathf.PI * 2f;
-            points[i] = new Vector3(
+            points[i] = transform.position + new Vector3(
                 Mathf.Cos(angle) * effectRadius,
                 Mathf.Sin(angle) * effectRadius,
                 0f
