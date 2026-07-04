@@ -70,6 +70,7 @@ namespace UI.Menu
                     StartCoroutine(ChangeSceneMaskingAnimation(level));
                 }
             });
+            AudioManager.Instance.StopMusic(2f);
         }
 
         private IEnumerator ChangeSceneMaskingAnimation(int level)
