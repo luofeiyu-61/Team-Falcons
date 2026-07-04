@@ -3,7 +3,7 @@ using UnityEngine;
 public class Spike : MonoBehaviour
 {
     [Header("检测设置")]
-    [SerializeField] private LayerMask playerLayer;
+    [SerializeField] private LayerMask playerLayer = 1 << 3; // 默认 Player 层 (index 3)
 
     private void OnTriggerEnter2D(Collider2D other)
     {
