@@ -12,12 +12,16 @@ public class DropPlatformController : MonoBehaviour, IShootControllable
     private Vector2 targetPosition;
     private bool isDropped = false;
     private float lastActivateTime;
+    private Rigidbody2D rb;
 
     private void Awake()
     {
+        rb = GetComponent<Rigidbody2D>();
         originalPosition = transform.position;
         targetPosition = originalPosition + Vector2.down * dropDistance;
     }
+
+    public bool BeingHeld { get; set; }
 
     public void OnShootActivate()
     {
@@ -25,19 +29,28 @@ public class DropPlatformController : MonoBehaviour, IShootControllable
         lastActivateTime = Time.time;
     }
 
+    /// 玩家离开按钮时调用，门立即升起。
+    public void OnShootDeactivate()
+    {
+        isDropped = false;
+    }
+
     private void Update()
     {
-        // 超过 holdTime 没有再次调用，回到原位
-        if (isDropped && Time.time - lastActivateTime > holdTime)
+        // 超过 holdTime 且没有被玩家踩住，回到原位（激光触发用）
+        if (isDropped && !BeingHeld && Time.time - lastActivateTime > holdTime)
         {
             isDropped = false;
         }
+    }
 
+    private void FixedUpdate()
+    {
         Vector2 destination = isDropped ? targetPosition : originalPosition;
-        transform.position = Vector2.MoveTowards(
+        rb.MovePosition(Vector2.MoveTowards(
             transform.position,
             destination,
-            (isDropped ? dropSpeed : returnSpeed) * Time.deltaTime
-        );
+            (isDropped ? dropSpeed : returnSpeed) * Time.fixedDeltaTime
+        ));
     }
 }

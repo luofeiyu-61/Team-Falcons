@@ -15,6 +15,10 @@ public class AnchorManager : MonoBehaviour
     [SerializeField] private int maxActiveAnchors = 1;
     [SerializeField] private bool refundWhenRemoved = false;
 
+    [Header("持有上限")]
+    [SerializeField] private int maxAttractCharges = 99;
+    [SerializeField] private int maxRepelCharges = 99;
+
     [Header("放置限制")]
     [SerializeField] private LayerMask anchorLayer;
     [SerializeField] private LayerMask blockedLayer;
@@ -75,25 +79,30 @@ public class AnchorManager : MonoBehaviour
     {
         if (batterySlots == null)
             batterySlots = GameObject.Find("BatterySlots").GetComponent<BatterySlots>();
+
+        // 同步 UI 最大显示值与持有上限
+        batterySlots.MaxCount = Mathf.Max(maxAttractCharges, maxRepelCharges);
+
         // 初始额度为零，需要拾取道具才能获得
         AttractCharges = 0;
         RepelCharges = 0;
     }
 
-    // 道具拾取：切换模式并增加对应额度
+    // 道具拾取：切换模式并增加对应额度（不超过上限）
     private void HandleAnchorModeChanged(AnchorModeChangedEvent gameEvent)
     {
         if (gameEvent.Mode == AnchorMode.Attract)
+        {
             attractUnlocked = true;
+            AttractCharges = Mathf.Min(AttractCharges + gameEvent.ChargeAmount, maxAttractCharges);
+        }
         else
+        {
             repelUnlocked = true;
+            RepelCharges = Mathf.Min(RepelCharges + gameEvent.ChargeAmount, maxRepelCharges);
+        }
 
         selectedMode = gameEvent.Mode;
-
-        if (gameEvent.Mode == AnchorMode.Attract)
-            AttractCharges += gameEvent.ChargeAmount;
-        else
-            RepelCharges += gameEvent.ChargeAmount;
     }
 
     // 获取当前模式可用额度
@@ -217,10 +226,10 @@ public class AnchorManager : MonoBehaviour
 
         activeAnchors.Clear();
 
-        // 撤销锚点后自动切枪
-        if (removedMode == AnchorMode.Attract && repelUnlocked)
+        // 撤销锚点后自动切枪：当前模式没余额时才切到另一边
+        if (selectedMode == AnchorMode.Attract && AttractCharges == 0 && repelUnlocked && RepelCharges > 0)
             selectedMode = AnchorMode.Repel;
-        else if (removedMode == AnchorMode.Repel && attractUnlocked)
+        else if (selectedMode == AnchorMode.Repel && RepelCharges == 0 && attractUnlocked && AttractCharges > 0)
             selectedMode = AnchorMode.Attract;
     }
 
