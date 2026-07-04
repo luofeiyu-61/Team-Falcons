@@ -17,7 +17,7 @@ namespace UI.InGame
         
         [SerializeField] private float batteryWidth;
 
-        public const int MaxCount = 5;
+        public int MaxCount = 4;
 
         private int blueCount;
         public int BlueCount
