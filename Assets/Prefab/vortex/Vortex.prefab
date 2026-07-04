@@ -115,7 +115,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mode: 0
   effectRadius: 4
-  gravitationalConstant: 400
+  gravitationalConstant: 200
   anchorMass: 1
   minDistance: 0.2
   targetLayer:

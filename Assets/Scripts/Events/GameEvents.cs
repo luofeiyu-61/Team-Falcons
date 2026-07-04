@@ -123,13 +123,15 @@ public struct ExitReachedEvent : IGameEvent
     }
 }
 
-// 锚点模式切换（道具拾取触发）
+// 锚点模式切换 + 额度增加（道具拾取触发）
 public struct AnchorModeChangedEvent : IGameEvent
 {
     public AnchorMode Mode;
+    public int ChargeAmount;
 
-    public AnchorModeChangedEvent(AnchorMode mode)
+    public AnchorModeChangedEvent(AnchorMode mode, int chargeAmount)
     {
         Mode = mode;
+        ChargeAmount = chargeAmount;
     }
 }

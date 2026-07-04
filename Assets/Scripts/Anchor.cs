@@ -25,9 +25,85 @@ public class Anchor : MonoBehaviour
 
     private readonly HashSet<Rigidbody2D> processedBodies = new();
 
+    private LineRenderer radiusLine;
+
     public void SetMode(AnchorMode newMode)
     {
         mode = newMode;
+        UpdateRadiusColor();
+    }
+
+    public AnchorMode GetMode()
+    {
+        return mode;
+    }
+
+    private void Start()
+    {
+        CreateRadiusLine();
+        CreateBlackHole();
+    }
+
+    private void CreateRadiusLine()
+    {
+        GameObject lineObj = new GameObject("RadiusVisual");
+        lineObj.transform.SetParent(transform, false);
+
+        radiusLine = lineObj.AddComponent<LineRenderer>();
+        radiusLine.useWorldSpace = false;
+        radiusLine.loop = true;
+        radiusLine.widthMultiplier = 0.05f;
+        radiusLine.sortingOrder = 10;
+
+        // 64 个点拼成圆
+        int segments = 64;
+        radiusLine.positionCount = segments;
+        Vector3[] points = new Vector3[segments];
+        for (int i = 0; i < segments; i++)
+        {
+            float angle = (float)i / segments * Mathf.PI * 2f;
+            points[i] = new Vector3(
+                Mathf.Cos(angle) * effectRadius,
+                Mathf.Sin(angle) * effectRadius,
+                0f
+            );
+        }
+        radiusLine.SetPositions(points);
+
+        UpdateRadiusColor();
+    }
+
+    private void UpdateRadiusColor()
+    {
+        if (radiusLine == null)
+            return;
+
+        radiusLine.startColor = mode == AnchorMode.Attract
+            ? Color.red    // 正红色
+            : Color.blue;  // 正蓝色
+        radiusLine.endColor = radiusLine.startColor;
+    }
+
+    private void CreateBlackHole()
+    {
+        GameObject holeObj = new GameObject("BlackHole");
+        holeObj.transform.SetParent(transform, false);
+
+        // 黑色小圆
+        SpriteRenderer sr = holeObj.AddComponent<SpriteRenderer>();
+        sr.sprite = GetComponent<SpriteRenderer>() != null
+            ? GetComponent<SpriteRenderer>().sprite
+            : null;
+        sr.color = Color.black;
+        holeObj.transform.localScale = new Vector3(0.3f, 0.3f, 1f);
+
+        // Trigger 检测
+        CircleCollider2D col = holeObj.AddComponent<CircleCollider2D>();
+        col.isTrigger = true;
+        col.radius = 0.5f;
+
+        // 挂载 BlackHole 脚本
+        holeObj.AddComponent<BlackHole>();
     }
 
     private void FixedUpdate()
@@ -56,11 +132,9 @@ public class Anchor : MonoBehaviour
 
             float distance = toAnchor.magnitude;
 
+            // 距离过近时跳过施力，由 BlackHole Trigger 处理
             if (distance < 0.1f)
-            {
-                Destroy(body.gameObject);
                 continue;
-            }
 
             Vector2 direction = toAnchor.normalized;
 

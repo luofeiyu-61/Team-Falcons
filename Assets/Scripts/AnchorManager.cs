@@ -10,7 +10,6 @@ public class AnchorManager : MonoBehaviour
     [SerializeField] private Anchor repelAnchorPrefab;
 
     [Header("资源限制")]
-    [SerializeField] private int startingCharges = 5;
     [SerializeField] private int placementCost = 1;
     [SerializeField] private int maxActiveAnchors = 3;
     [SerializeField] private bool refundWhenRemoved = false;
@@ -23,12 +22,17 @@ public class AnchorManager : MonoBehaviour
     [Header("锚点模式")]
     [SerializeField] private AnchorMode selectedMode = AnchorMode.Attract;
 
-    private int remainingCharges;
+    private int attractCharges;
+    private int repelCharges;
     private bool repelUnlocked = false;
 
     private readonly List<Anchor> activeAnchors = new();
 
-    public int RemainingCharges => remainingCharges;
+    public int AttractCharges => attractCharges;
+    public int RepelCharges => repelCharges;
+    public int RemainingCharges => selectedMode == AnchorMode.Attract
+        ? attractCharges
+        : repelCharges;
     public int ActiveAnchorCount => activeAnchors.Count;
 
     private void Awake()
@@ -49,16 +53,40 @@ public class AnchorManager : MonoBehaviour
 
     private void Start()
     {
-        remainingCharges = startingCharges;
+        // 初始额度为零，需要拾取道具才能获得
+        attractCharges = 0;
+        repelCharges = 0;
     }
 
-    // 道具拾取切换锚点模式
+    // 道具拾取：切换模式并增加对应额度
     private void HandleAnchorModeChanged(AnchorModeChangedEvent gameEvent)
     {
         if (gameEvent.Mode == AnchorMode.Repel)
             repelUnlocked = true;
 
         selectedMode = gameEvent.Mode;
+
+        if (gameEvent.Mode == AnchorMode.Attract)
+            attractCharges += gameEvent.ChargeAmount;
+        else
+            repelCharges += gameEvent.ChargeAmount;
+    }
+
+    // 获取当前模式可用额度
+    private int GetRemainingCharges()
+    {
+        return selectedMode == AnchorMode.Attract
+            ? attractCharges
+            : repelCharges;
+    }
+
+    // 扣除当前模式额度
+    private void SpendCharge()
+    {
+        if (selectedMode == AnchorMode.Attract)
+            attractCharges -= placementCost;
+        else
+            repelCharges -= placementCost;
     }
 
     // 根据当前模式获取对应 Prefab
@@ -98,7 +126,7 @@ public class AnchorManager : MonoBehaviour
         if (activePrefab == null)
             return;
 
-        if (remainingCharges < placementCost)
+        if (GetRemainingCharges() < placementCost)
             return;
 
         if (maxActiveAnchors > 0 &&
@@ -128,7 +156,7 @@ public class AnchorManager : MonoBehaviour
         newAnchor.SetMode(selectedMode);
 
         activeAnchors.Add(newAnchor);
-        remainingCharges -= placementCost;
+        SpendCharge();
     }
 
     private void TryRemoveAnchor()
@@ -152,10 +180,10 @@ public class AnchorManager : MonoBehaviour
 
         if (refundWhenRemoved)
         {
-            remainingCharges = Mathf.Min(
-                remainingCharges + placementCost,
-                startingCharges
-            );
+            if (anchor.GetMode() == AnchorMode.Attract)
+                attractCharges += placementCost;
+            else
+                repelCharges += placementCost;
         }
 
         Destroy(anchor.gameObject);

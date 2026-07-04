@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2126904352}
   - component: {fileID: 2126904355}
   m_Layer: 7
-  m_Name: Vortex
+  m_Name: Vortex - Copy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
