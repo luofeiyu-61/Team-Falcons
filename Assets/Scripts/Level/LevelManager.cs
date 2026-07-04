@@ -156,13 +156,9 @@ public class LevelManager : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(respawnDelay);
 
-        playerRespawn.RespawnAt(currentRespawnPosition);
-
-        GameEventBus.Publish(
-            new PlayerRespawnedEvent(currentRespawnPosition)
-        );
-
-        CurrentState = LevelState.Playing;
+        // 重载场景：所有状态归零，Awake 中用 savedCheckpoint 复位玩家
+        Scene currentScene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(currentScene.buildIndex);
     }
 
     public void CompleteLevel()
