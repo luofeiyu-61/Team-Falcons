@@ -5,8 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
-  - Menu
-  - InGame
+  - Button
+  - Gravitable
   layers:
   - Default
   - TransparentFX

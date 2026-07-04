@@ -60,6 +60,9 @@ public class LaserTurret : MonoBehaviour
         // 创建激光物体
         GameObject laser = new GameObject("Laser");
         laser.transform.position = firePoint.position;
+        laser.layer = LayerMask.NameToLayer("Default");
+        laser.tag = "Gravitable";
+        laser.transform.localScale = new Vector3(0.1f, 1f, 1f);
 
         // 精灵渲染器
         SpriteRenderer sr = laser.AddComponent<SpriteRenderer>();
@@ -68,7 +71,8 @@ public class LaserTurret : MonoBehaviour
 
         // Kinematic 刚体，确保 Trigger 检测正常
         Rigidbody2D rb = laser.AddComponent<Rigidbody2D>();
-        rb.bodyType = RigidbodyType2D.Kinematic;
+        rb.bodyType = RigidbodyType2D.Dynamic;
+        rb.gravityScale = 0f;
 
         // 触发碰撞体
         BoxCollider2D col = laser.AddComponent<BoxCollider2D>();

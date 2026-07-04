@@ -16,9 +16,9 @@ public class BlackHole : MonoBehaviour
 
             GameEventBus.Publish(new PlayerDiedEvent(deathPosition));
         }
-        else
+        else if (other.CompareTag("Gravitable"))
         {
-            // 其他物体进入：直接销毁
+            // 可吸附物体进入：直接销毁，不触发关卡重开
             Destroy(other.gameObject);
         }
     }

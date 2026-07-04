@@ -110,14 +110,20 @@ public class Anchor : MonoBehaviour
     {
         Collider2D[] targets = Physics2D.OverlapCircleAll(
             transform.position,
-            effectRadius,
-            targetLayer
+            effectRadius
         );
 
         processedBodies.Clear();
 
         foreach (Collider2D target in targets)
         {
+            // 只处理 targetLayer 层级或 Tag 为 Gravitable 的物体
+            bool isTargetLayer = ((1 << target.gameObject.layer) & targetLayer) != 0;
+            bool isGravitable = target.CompareTag("Gravitable");
+
+            if (!isTargetLayer && !isGravitable)
+                continue;
+
             Rigidbody2D body = target.attachedRigidbody;
 
             if (body == null)
