@@ -302,7 +302,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 491503206}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.85, y: -0.28, z: 0}
+  m_LocalPosition: {x: -7.85, y: 1.81, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -463,7 +463,6 @@ MonoBehaviour:
   gameplayCamera: {fileID: 1388231131}
   attractAnchorPrefab: {fileID: 5203719689247514081, guid: 06010b4fae3a5d84c9cccf8c1e3deeb4, type: 3}
   repelAnchorPrefab: {fileID: 7835544658520123351, guid: b0eb7f47970c9334da1c6fa1b259cba7, type: 3}
-  startingCharges: 5
   placementCost: 1
   maxActiveAnchors: 3
   refundWhenRemoved: 0
@@ -835,6 +834,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pickupMode: 0
+  chargeAmount: 1
   playerLayer:
     serializedVersion: 2
     m_Bits: 8
