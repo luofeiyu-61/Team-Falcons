@@ -1164,6 +1164,8 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 8
+  pickupSound: {fileID: 0}
+  pickupSoundVolume: 1
 --- !u!212 &1555886922
 SpriteRenderer:
   m_ObjectHideFlags: 0
