@@ -6,19 +6,19 @@ public class Laser : MonoBehaviour
     [SerializeField] private string buttonTag = "Button";
     [SerializeField] private LayerMask playerLayer = 1 << 3; // 默认 Player 层
 
-    private float direction;
+    private Vector2 direction;
     private float speed;
     private float lifetime;
 
     /// 由 LaserTurret 调用，初始化激光参数。
     public void Initialize(
-        float dir,
+        Vector2 dir,
         float spd,
         float life,
         LayerMask layer
     )
     {
-        direction = dir;
+        direction = dir.normalized;
         speed = spd;
         lifetime = life;
         playerLayer = layer;
@@ -26,12 +26,8 @@ public class Laser : MonoBehaviour
 
     private void Update()
     {
-        // 水平方向匀速移动
-        transform.position += new Vector3(
-            direction * speed * Time.deltaTime,
-            0f,
-            0f
-        );
+        // 沿指定方向匀速移动
+        transform.position += (Vector3)(direction * speed * Time.deltaTime);
     }
 
     private void OnTriggerEnter2D(Collider2D other)

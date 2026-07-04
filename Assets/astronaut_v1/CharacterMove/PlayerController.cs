@@ -82,17 +82,32 @@ public class PlayerController : MonoBehaviour
 
         UpdateFacing(moveInput.x);
     }
+    private AnchorManager anchorManager;
     private float lastPlayerVelocityX;
 
     private void FixedUpdate()
     {
         if (isDead) return;
 
-        // 保留外部力（如 Anchor 斥力）带来的水平速度变化
-        float externalX = rb.velocity.x - lastPlayerVelocityX;
+        if (anchorManager == null)
+            anchorManager = FindObjectOfType<AnchorManager>();
 
         float horizontal = moveInput.x;
-        rb.velocity = new Vector2(horizontal * moveSpeed, rb.velocity.y);
+        bool repelActive = anchorManager != null && anchorManager.HasActiveRepel();
+
+        if (repelActive)
+        {
+            // 斥力锚点：保留外部水平力
+            float externalX = rb.velocity.x - lastPlayerVelocityX;
+            float targetVelX = horizontal * moveSpeed;
+            lastPlayerVelocityX = targetVelX;
+            rb.velocity = new Vector2(targetVelX + externalX, rb.velocity.y);
+        }
+        else
+        {
+            // 引力锚点或无锚点：原始算法，手感不变
+            rb.velocity = new Vector2(horizontal * moveSpeed, rb.velocity.y);
+        }
         animator.SetFloat("Walk", Mathf.Abs(horizontal) > MoveDeadZone ? moveSpeed : 0f);
     }
 
