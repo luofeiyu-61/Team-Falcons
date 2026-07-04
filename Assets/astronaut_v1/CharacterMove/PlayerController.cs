@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        Invoke("SwitchCamera", 3f);
+        Invoke("SwitchCamera", 1.5f);
 
     }
     private void Update()
@@ -142,7 +142,10 @@ public class PlayerController : MonoBehaviour
 
     private void SwitchCamera()
     {
-        virtualCamera1.Priority = 12;
-        virtualCamera2.Priority = 10;
+        if (virtualCamera1 != null && virtualCamera2 != null)
+        {
+            virtualCamera1.Priority = 12;
+            virtualCamera2.Priority = 10;
+        }
     }
 }
