@@ -23,6 +23,9 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
     private SpriteRenderer sr;
     private bool isDead = false;
+    [SerializeField] private bool faceRightWhenMovingRight = true;
+    private bool isFacingRight = true;
+    private const float MoveDeadZone = 0.01f;
     [Header("Virtual Camera")]
     public CinemachineVirtualCamera virtualCamera1;
     public CinemachineVirtualCamera virtualCamera2;
@@ -77,14 +80,7 @@ public class PlayerController : MonoBehaviour
             isGrounded = false;  
         }
 
-        if (rb.velocity.x > 0)
-        {
-            sr.flipX = false;
-        }
-        else if (rb.velocity.x < 0)
-        {
-            sr.flipX = true;
-        }
+        UpdateFacing(moveInput.x);
     }
     private float lastPlayerVelocityX;
 
@@ -96,18 +92,32 @@ public class PlayerController : MonoBehaviour
         float externalX = rb.velocity.x - lastPlayerVelocityX;
 
         float horizontal = moveInput.x;
-        float targetVelX = horizontal * moveSpeed;
-        lastPlayerVelocityX = targetVelX;
+        rb.velocity = new Vector2(horizontal * moveSpeed, rb.velocity.y);
+        animator.SetFloat("Walk", Mathf.Abs(horizontal) > MoveDeadZone ? moveSpeed : 0f);
+    }
 
-        rb.velocity = new Vector2(targetVelX + externalX, rb.velocity.y);
+    private void LateUpdate()
+    {
+        ApplyFacing();
+    }
 
-        if (rb.velocity.x != 0) {
-            animator.SetFloat("Walk", moveSpeed);
-        }
-        else
+    private void UpdateFacing(float horizontal)
+    {
+        if (horizontal > MoveDeadZone)
         {
-            animator.SetFloat("Walk", 0);
+            isFacingRight = true;
         }
+        else if (horizontal < -MoveDeadZone)
+        {
+            isFacingRight = false;
+        }
+
+        ApplyFacing();
+    }
+
+    private void ApplyFacing()
+    {
+        sr.flipX = faceRightWhenMovingRight ? !isFacingRight : isFacingRight;
     }
 
     private void OnJumpPerformed(InputAction.CallbackContext ctx)
