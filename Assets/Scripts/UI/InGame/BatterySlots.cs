@@ -7,11 +7,15 @@ namespace UI.InGame
     public class BatterySlots : MonoBehaviour
     {
         [SerializeField] private RectMask2D blueMask;
-        [SerializeField] private TextMeshProUGUI blueText;
+        // [SerializeField] private TextMeshProUGUI blueText;
         [SerializeField] private RectMask2D redMask;
-        [SerializeField] private TextMeshProUGUI redText;
+        // [SerializeField] private TextMeshProUGUI redText;
+        private RectTransform blueRect;
+        private RectTransform redRect;
         [SerializeField] private GameObject blueObject;
         [SerializeField] private GameObject redObject;
+        
+        [SerializeField] private float batteryWidth;
 
         public const int MaxCount = 5;
 
@@ -22,8 +26,8 @@ namespace UI.InGame
             set
             {
                 blueCount = value;
-                blueText.text = blueCount.ToString();
-                blueMask.padding = new Vector4(0, 0, (MaxCount - blueCount) * blueMask.rectTransform.rect.width / MaxCount, 0);
+                // blueText.text = blueCount.ToString();
+                blueMask.padding = new Vector4(0, 0, (MaxCount - blueCount) * batteryWidth / MaxCount, 0);
                 if (blueCount <= 0)
                 {
                     blueCount = 0;
@@ -44,8 +48,8 @@ namespace UI.InGame
             set
             {
                 redCount = value;
-                redText.text = redCount.ToString();
-                redMask.padding = new Vector4(0, 0, (MaxCount - redCount) * blueMask.rectTransform.rect.width / MaxCount, 0);
+                // redText.text = redCount.ToString();
+                redMask.padding = new Vector4(0, 0, (MaxCount - redCount) * batteryWidth / MaxCount, 0);
                 if (redCount <= 0)
                 {
                     redCount = 0;
@@ -87,7 +91,8 @@ namespace UI.InGame
         
         private void Awake()
         {
-            
+            blueRect  = blueMask.rectTransform;
+            redRect = redMask.rectTransform;
         }
         
         private void Start()
@@ -98,7 +103,10 @@ namespace UI.InGame
 
         private void Update()
         {
-            /*if (Input.GetKeyDown(KeyCode.I))
+            if (!Application.isPlaying)
+                return;
+
+            if (Input.GetKeyDown(KeyCode.I))
             {
                 BlueCount++;
             }
@@ -113,7 +121,7 @@ namespace UI.InGame
             else if (Input.GetKeyDown(KeyCode.K))
             {
                 RedCount--;
-            }*/
+            }
         }
     }
 }
