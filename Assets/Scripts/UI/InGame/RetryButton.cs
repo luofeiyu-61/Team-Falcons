@@ -6,7 +6,7 @@ namespace UI.InGame
     {
         public void OnRetryButtonClicked()
         {
-            
+            LevelController.RestartCurrentLevel();
         }
     }
 }

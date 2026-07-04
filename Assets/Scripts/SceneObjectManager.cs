@@ -1,21 +1,14 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneObjectManager : MonoBehaviour
+public class SceneObjectManager : MonoSingleton<SceneObjectManager>
 {
-    private SceneType currentSceneType = SceneType.Menu;
-    private string previousSceneName = "";
-    public static SceneObjectManager Instance;
+    public SceneType currentSceneType = SceneType.Menu;
+    public string previousSceneName = "";
 
-    private void Awake()
+    protected override void SafeAwake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            SceneManager.sceneLoaded += HandleSceneLoad;
-        }
-        else
-            Destroy(this);
+        SceneManager.sceneLoaded += HandleSceneLoad;
     }
 
     private void HandleSceneLoad(Scene scene, LoadSceneMode mode)
@@ -35,6 +28,13 @@ public class SceneObjectManager : MonoBehaviour
         }
         else if (previousSceneName.Contains("Menu"))
         {
+            foreach (var go in gameObject.scene.GetRootGameObjects())
+            {
+                if (go.CompareTag("Menu"))
+                {
+                    Destroy(go);
+                }
+            }
             SceneManager.LoadScene("GameInitializeScene", LoadSceneMode.Additive);
         }
         currentSceneType = scene.name.Contains("Menu") ? SceneType.Menu : SceneType.InGame;
