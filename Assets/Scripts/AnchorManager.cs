@@ -161,32 +161,24 @@ public class AnchorManager : MonoBehaviour
 
     private void TryRemoveAnchor()
     {
-        Vector2 mouseWorldPosition = GetMouseWorldPosition();
-
-        Collider2D hit = Physics2D.OverlapPoint(
-            mouseWorldPosition,
-            anchorLayer
-        );
-
-        if (hit == null)
-            return;
-
-        Anchor anchor = hit.GetComponentInParent<Anchor>();
-
-        if (anchor == null)
-            return;
-
-        activeAnchors.Remove(anchor);
-
-        if (refundWhenRemoved)
+        // 右键一次销毁所有已放置的 Anchor
+        foreach (Anchor anchor in activeAnchors)
         {
-            if (anchor.GetMode() == AnchorMode.Attract)
-                attractCharges += placementCost;
-            else
-                repelCharges += placementCost;
+            if (anchor != null)
+            {
+                if (refundWhenRemoved)
+                {
+                    if (anchor.GetMode() == AnchorMode.Attract)
+                        attractCharges += placementCost;
+                    else
+                        repelCharges += placementCost;
+                }
+
+                Destroy(anchor.gameObject);
+            }
         }
 
-        Destroy(anchor.gameObject);
+        activeAnchors.Clear();
     }
 
     private Vector2 GetMouseWorldPosition()
