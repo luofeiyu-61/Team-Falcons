@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        Invoke("SwitchCamera", 3f);
+        Invoke("SwitchCamera", 1.5f);
 
     }
     private void Update()

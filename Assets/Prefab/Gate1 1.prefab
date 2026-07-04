@@ -140,3 +140,5 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   checkpointId: Exit
+  triggerSound: {fileID: 8300000, guid: ab457c82a9aede74e9a3b19eb3da96c6, type: 3}
+  triggerSoundVolume: 1
