@@ -50,7 +50,7 @@ MonoBehaviour:
   firePoint: {fileID: 7750574329844830893}
   laserTexture: {fileID: 2800000, guid: 52c2bd58073f6c94697e683ae2e15a50, type: 3}
   fireInterval: 2
-  laserSpeed: 8
+  laserSpeed: 15
   laserLifetime: 5
   fireDirection: 0
   playerLayer:
