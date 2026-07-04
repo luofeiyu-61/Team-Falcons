@@ -99,6 +99,14 @@ public class LevelManager : MonoBehaviour
         levelStartTime = Time.unscaledTime;
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            RestartCurrentLevel();
+        }
+    }
+
     private void OnEnable()
     {
         GameEventBus.Subscribe<PlayerDiedEvent>(HandlePlayerDied);
