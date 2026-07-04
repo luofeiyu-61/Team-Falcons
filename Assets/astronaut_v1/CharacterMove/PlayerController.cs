@@ -23,6 +23,9 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
     private SpriteRenderer sr;
     private bool isDead = false;
+    [SerializeField] private bool faceRightWhenMovingRight = true;
+    private bool isFacingRight = true;
+    private const float MoveDeadZone = 0.01f;
     [Header("Virtual Camera")]
     public CinemachineVirtualCamera virtualCamera1;
     public CinemachineVirtualCamera virtualCamera2;
@@ -77,28 +80,60 @@ public class PlayerController : MonoBehaviour
             isGrounded = false;  
         }
 
-        if (rb.velocity.x > 0)
-        {
-            sr.flipX = false;
-        }
-        else if (rb.velocity.x < 0)
-        {
-            sr.flipX = true;
-        }
+        UpdateFacing(moveInput.x);
     }
+    private AnchorManager anchorManager;
+    private float lastPlayerVelocityX;
+
     private void FixedUpdate()
     {
         if (isDead) return;
 
+        if (anchorManager == null)
+            anchorManager = FindObjectOfType<AnchorManager>();
+
         float horizontal = moveInput.x;
-        rb.velocity = new Vector2(horizontal * moveSpeed, rb.velocity.y);
-        if (rb.velocity.x != 0) { 
-            animator.SetFloat("Walk", moveSpeed);
+        bool repelActive = anchorManager != null && anchorManager.HasActiveRepel();
+
+        float targetVelX = horizontal * moveSpeed;
+
+        // 空中且斥力激活：保留外部水平力（锚点推力），避免被玩家输入覆盖
+        // 地面时：直接设置速度，让物理自然处理接触，防止弹跳
+        if (repelActive && !isGrounded)
+        {
+            float externalX = rb.velocity.x - lastPlayerVelocityX;
+            rb.velocity = new Vector2(targetVelX + externalX, rb.velocity.y);
         }
         else
         {
-            animator.SetFloat("Walk", 0);
+            rb.velocity = new Vector2(targetVelX, rb.velocity.y);
         }
+        lastPlayerVelocityX = targetVelX;
+        animator.SetFloat("Walk", Mathf.Abs(horizontal) > MoveDeadZone ? moveSpeed : 0f);
+    }
+
+    private void LateUpdate()
+    {
+        ApplyFacing();
+    }
+
+    private void UpdateFacing(float horizontal)
+    {
+        if (horizontal > MoveDeadZone)
+        {
+            isFacingRight = true;
+        }
+        else if (horizontal < -MoveDeadZone)
+        {
+            isFacingRight = false;
+        }
+
+        ApplyFacing();
+    }
+
+    private void ApplyFacing()
+    {
+        sr.flipX = faceRightWhenMovingRight ? !isFacingRight : isFacingRight;
     }
 
     private void OnJumpPerformed(InputAction.CallbackContext ctx)
