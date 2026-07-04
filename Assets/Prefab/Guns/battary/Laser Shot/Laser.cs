@@ -7,9 +7,7 @@ public class Laser : MonoBehaviour
     private float lifetime;
     private LayerMask playerLayer;
 
-    /// <summary>
     /// 由 LaserTurret 调用，初始化激光参数。
-    /// </summary>
     public void Initialize(
         float dir,
         float spd,

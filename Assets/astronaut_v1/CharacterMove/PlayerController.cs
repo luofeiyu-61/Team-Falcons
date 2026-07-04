@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,14 +6,14 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("ÒÆ¶¯ÉèÖÃ")]
+    [Header("ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½")]
     [SerializeField] private float moveSpeed = 5f;
-    [Header("ÌøÔ¾ÉèÖÃ")]
+    [Header("ï¿½ï¿½Ô¾ï¿½ï¿½ï¿½ï¿½")]
     [SerializeField] private float jumpForce = 10f;
-    [SerializeField] private float jumpCutMultiplier = 0.5f;     // ÌáÇ°ÖÕÖ¹ÌøÔ¾ÏµÊý
-    [Header("ÊÖ¸ÐÓÅ»¯")]
-    [SerializeField] private float coyoteTime = 0.1f;            // ÍÁÀÇÊ±¼ä
-    [SerializeField] private float jumpBufferTime = 0.1f;        // ÌøÔ¾»º³åÊ±¼ä
+    [SerializeField] private float jumpCutMultiplier = 0.5f;     // ï¿½ï¿½Ç°ï¿½ï¿½Ö¹ï¿½ï¿½Ô¾Ïµï¿½ï¿½
+    [Header("ï¿½Ö¸ï¿½ï¿½Å»ï¿½")]
+    [SerializeField] private float coyoteTime = 0.1f;            // ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+    [SerializeField] private float jumpBufferTime = 0.1f;        // ï¿½ï¿½Ô¾ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
     private Rigidbody2D rb;
     private MainCharacter controls;
     private Vector2 moveInput;
@@ -21,6 +22,10 @@ public class PlayerController : MonoBehaviour
     private float jumpBufferCounter;
     private Animator animator;
     private SpriteRenderer sr;
+    private bool isDead = false;
+    [Header("Virtual Camera")]
+    public CinemachineVirtualCamera virtualCamera1;
+    public CinemachineVirtualCamera virtualCamera2;
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -30,18 +35,29 @@ public class PlayerController : MonoBehaviour
     }
     private void OnEnable()
     {
+        GameEventBus.Subscribe<PlayerDiedEvent>(PlayerDied);
+        GameEventBus.Subscribe<PlayerRespawnedEvent>(PlayerRespawned);
         controls.player.Enable();
         controls.player.Jump.performed += OnJumpPerformed;
         controls.player.Jump.canceled += OnJumpCanceled;
     }
     private void OnDisable()
     {
+        GameEventBus.Unsubscribe<PlayerDiedEvent>(PlayerDied);
+        GameEventBus.Unsubscribe<PlayerRespawnedEvent>(PlayerRespawned);
         controls.player.Jump.performed -= OnJumpPerformed;
         controls.player.Jump.canceled -= OnJumpCanceled;
         controls.player.Disable();
     }
+
+    void Start()
+    {
+        Invoke("SwitchCamera", 3f);
+
+    }
     private void Update()
     {
+        if (isDead) return;
         moveInput = controls.player.Move.ReadValue<Vector2>();
 
         if (isGrounded)
@@ -72,6 +88,7 @@ public class PlayerController : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        if (isDead) return;
 
         float horizontal = moveInput.x;
         rb.velocity = new Vector2(horizontal * moveSpeed, rb.velocity.y);
@@ -86,8 +103,10 @@ public class PlayerController : MonoBehaviour
 
     private void OnJumpPerformed(InputAction.CallbackContext ctx)
     {
+        if (isDead) return;
         animator.SetTrigger("Jump");
         jumpBufferCounter = jumpBufferTime;
+        Debug.Log("good jump");
     }
 
     private void OnJumpCanceled(InputAction.CallbackContext ctx)
@@ -106,5 +125,24 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ground"))
             isGrounded = false;
+    }
+    
+    private void PlayerDied(PlayerDiedEvent gameEvent)
+    {
+        isDead = true;
+        animator.SetTrigger("dead");
+    }
+
+    private void PlayerRespawned(PlayerRespawnedEvent gameEvent)
+    {
+        isDead = false;
+        animator.ResetTrigger("dead");
+        animator.Play("breath", 0, 0f);
+    }
+
+    private void SwitchCamera()
+    {
+        virtualCamera1.Priority = 12;
+        virtualCamera2.Priority = 10;
     }
 }

@@ -16,16 +16,15 @@ public class PlayerRespawn : MonoBehaviour
         }
     }
 
-    // 玩家死亡后：停止运动、禁止操作
+    // 玩家死亡后：禁止操作，但保留重力让角色落回地面
     public void EnterDeadState()
     {
         SetControlEnabled(false);
 
         if (playerRb != null)
         {
-            playerRb.velocity = Vector2.zero;
+            playerRb.velocity = new Vector2(0f, playerRb.velocity.y);
             playerRb.angularVelocity = 0f;
-            playerRb.simulated = false;
         }
     }
 
