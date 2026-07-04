@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class MosaicBlurTransitionEffect : MonoBehaviour
@@ -25,7 +26,7 @@ public class MosaicBlurTransitionEffect : MonoBehaviour
     private static readonly int MosaicProgressId = Shader.PropertyToID("_MosaicProgress");
     private static readonly int MaxBlurRadiusId = Shader.PropertyToID("_MaxBlurRadius");
     private static readonly int MaxBlockSizeId = Shader.PropertyToID("_MaxBlockSize");
-
+    
     private void Awake()
     {
         Image image = GetComponent<Image>();
@@ -71,15 +72,15 @@ public class MosaicBlurTransitionEffect : MonoBehaviour
     // ═══════════════════════════════════════════
 
     /// <summary>清晰 → 完全模糊</summary>
-    public void PlayBlurForward()
+    public void PlayBlurForward(UnityAction<(bool blur, bool reverse)> callback = null)
     {
-        PlayBlur(0f, 1f);
+        PlayBlur(0f, 1f, callback);
     }
 
     /// <summary>完全模糊 → 清晰</summary>
-    public void PlayBlurReverse()
+    public void PlayBlurReverse(UnityAction<(bool blur, bool reverse)> callback = null)
     {
-        PlayBlur(1f, 0f);
+        PlayBlur(1f, 0f, callback);
     }
 
     /// <summary>直接设置模糊量（0 = 清晰，1 = 完全模糊）</summary>
@@ -98,7 +99,7 @@ public class MosaicBlurTransitionEffect : MonoBehaviour
     }
 
     /// <summary>在 blurDuration 内将模糊量从 fromBlur 渐变到 toBlur</summary>
-    public void PlayBlur(float fromBlur, float toBlur)
+    public void PlayBlur(float fromBlur, float toBlur, UnityAction<(bool blur, bool reverse)> callback = null)
     {
         if (materialInstance == null || !materialInstance.HasProperty(BlurAmountId))
             return;
@@ -106,7 +107,7 @@ public class MosaicBlurTransitionEffect : MonoBehaviour
         if (blurRoutine != null)
             StopCoroutine(blurRoutine);
 
-        blurRoutine = StartCoroutine(Animate(BlurAmountId, fromBlur, toBlur, blurDuration));
+        blurRoutine = StartCoroutine(Animate(BlurAmountId, fromBlur, toBlur, blurDuration, callback));
     }
 
     // ═══════════════════════════════════════════
@@ -114,15 +115,15 @@ public class MosaicBlurTransitionEffect : MonoBehaviour
     // ═══════════════════════════════════════════
 
     /// <summary>原图 → 完全马赛克</summary>
-    public void PlayMosaicForward()
+    public void PlayMosaicForward(UnityAction<(bool blur, bool reverse)> callback = null)
     {
-        PlayMosaic(0f, 1f);
+        PlayMosaic(0f, 1f, callback);
     }
 
     /// <summary>完全马赛克 → 原图</summary>
-    public void PlayMosaicReverse()
+    public void PlayMosaicReverse(UnityAction<(bool blur, bool reverse)> callback = null)
     {
-        PlayMosaic(1f, 0f);
+        PlayMosaic(1f, 0f, callback);
     }
 
     /// <summary>直接设置马赛克进度（0 = 原图，1 = 完全马赛克）</summary>
@@ -141,7 +142,7 @@ public class MosaicBlurTransitionEffect : MonoBehaviour
     }
 
     /// <summary>在 mosaicDuration 内将马赛克进度从 fromProgress 渐变到 toProgress</summary>
-    public void PlayMosaic(float fromProgress, float toProgress)
+    public void PlayMosaic(float fromProgress, float toProgress, UnityAction<(bool blur, bool reverse)> callback = null)
     {
         if (materialInstance == null || !materialInstance.HasProperty(MosaicProgressId))
             return;
@@ -149,7 +150,7 @@ public class MosaicBlurTransitionEffect : MonoBehaviour
         if (mosaicRoutine != null)
             StopCoroutine(mosaicRoutine);
 
-        mosaicRoutine = StartCoroutine(Animate(MosaicProgressId, fromProgress, toProgress, mosaicDuration));
+        mosaicRoutine = StartCoroutine(Animate(MosaicProgressId, fromProgress, toProgress, mosaicDuration, callback));
     }
 
     // ═══════════════════════════════════════════
@@ -234,7 +235,7 @@ public class MosaicBlurTransitionEffect : MonoBehaviour
         }
     }
 
-    private IEnumerator Animate(int propertyId, float from, float to, float duration)
+    private IEnumerator Animate(int propertyId, float from, float to, float duration, UnityAction<(bool blur, bool reverse)> callback)
     {
         materialInstance.SetFloat(propertyId, from);
 
@@ -248,5 +249,6 @@ public class MosaicBlurTransitionEffect : MonoBehaviour
         }
 
         materialInstance.SetFloat(propertyId, to);
+        callback?.Invoke((propertyId == BlurAmountId, from > to));
     }
 }
