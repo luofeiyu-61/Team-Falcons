@@ -86,6 +86,10 @@ public class Anchor : MonoBehaviour
 
     private void CreateBlackHole()
     {
+        // 只有 Attract 模式才创建致命中心
+        if (mode != AnchorMode.Attract)
+            return;
+
         GameObject holeObj = new GameObject("BlackHole");
         holeObj.transform.SetParent(transform, false);
 
