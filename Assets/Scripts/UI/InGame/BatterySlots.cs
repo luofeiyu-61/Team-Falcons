@@ -139,25 +139,24 @@ namespace UI.InGame
         public void HandleInputSelection(AnchorMode mode)
         {
             StopAllCoroutines();
-            if (mode == AnchorMode.Attract)
-            {
-                StartCoroutine(MoveArrowCoroutine(blueObject.transform.localPosition.y, 500f));
-            }
-            else
-            {
-                StartCoroutine(MoveArrowCoroutine(redObject.transform.localPosition.y, 500f));
-            }
+            // 强制立即重建布局，避免首次激活时读到布局前的错误位置
+            UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)transform);
+
+            float targetY = mode == AnchorMode.Attract
+                ? blueObject.transform.localPosition.y
+                : redObject.transform.localPosition.y;
+            StartCoroutine(MoveArrowCoroutine(targetY, 500f));
         }
 
         private IEnumerator MoveArrowCoroutine(float yDest, float speed)
         {
             Vector3 startPos = arrow.transform.localPosition;
             Vector3 endPos = new Vector3(startPos.x, yDest, startPos.z);
-            float distance = Vector3.Distance(startPos, endPos);
+            float distance = Mathf.Abs(yDest - startPos.y);
             if (Mathf.Approximately(distance, 0f))
             {
                 yield break;
-            }
+            }   
             
             float duration = distance / speed;
             float elapsedTime = 0f;
