@@ -26,6 +26,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool faceRightWhenMovingRight = true;
     private bool isFacingRight = true;
     private const float MoveDeadZone = 0.01f;
+
+    [Header("地面检测")]
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private float groundCheckRadius = 0.18f;
+    [SerializeField] private LayerMask groundLayer = 1 << 6; // 默认 Ground 层
     [Header("Virtual Camera")]
     public CinemachineVirtualCamera virtualCamera1;
     public CinemachineVirtualCamera virtualCamera2;
@@ -38,7 +43,7 @@ public class PlayerController : MonoBehaviour
     }
     private void OnEnable()
     {
-        GameEventBus.Subscribe<PlayerDiedEvent>(PlayerDied);
+        GameEventBus.Subscribe<PlayerDiedEvent>(PlayerRespawned);
         GameEventBus.Subscribe<PlayerRespawnedEvent>(PlayerRespawned);
         controls.player.Enable();
         controls.player.Jump.performed += OnJumpPerformed;
@@ -46,7 +51,7 @@ public class PlayerController : MonoBehaviour
     }
     private void OnDisable()
     {
-        GameEventBus.Unsubscribe<PlayerDiedEvent>(PlayerDied);
+        GameEventBus.Unsubscribe<PlayerDiedEvent>(PlayerRespawned);
         GameEventBus.Unsubscribe<PlayerRespawnedEvent>(PlayerRespawned);
         controls.player.Jump.performed -= OnJumpPerformed;
         controls.player.Jump.canceled -= OnJumpCanceled;
@@ -62,6 +67,10 @@ public class PlayerController : MonoBehaviour
     {
         if (isDead) return;
         moveInput = controls.player.Move.ReadValue<Vector2>();
+
+        isGrounded = groundCheck != null
+            ? Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer)
+            : false;
 
         if (isGrounded)
             coyoteCounter = coyoteTime;
@@ -151,18 +160,7 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * jumpCutMultiplier);
         }
     }
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Ground"))
-            isGrounded = true;
-    }
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Ground"))
-            isGrounded = false;
-    }
-    
-    private void PlayerDied(PlayerDiedEvent gameEvent)
+    private void PlayerRespawned(PlayerDiedEvent gameEvent)
     {
         isDead = true;
         animator.SetTrigger("dead");
