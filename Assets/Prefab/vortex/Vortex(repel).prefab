@@ -121,5 +121,5 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 8
-  blackHoleWorldScale: 0.15
+  blackHoleWorldScale: 0.4
   blackHoleTriggerRadius: 2

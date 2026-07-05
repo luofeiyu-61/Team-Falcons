@@ -122,7 +122,7 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 8
-  blackHoleWorldScale: 0.15
+  blackHoleWorldScale: 0.4
   blackHoleTriggerRadius: 2
 --- !u!58 &2895321811415927120
 CircleCollider2D:

@@ -28,10 +28,13 @@ public class Anchor : MonoBehaviour
     [SerializeField] private LayerMask targetLayer;
 
     [Header("黑洞中心")]
-    [SerializeField, Min(0f)] private float blackHoleWorldScale = 0.15f;
+    [SerializeField, Min(0f)] private float blackHoleWorldScale = 0.18f;
     [SerializeField, Min(0f)] private float blackHoleTriggerRadius = 2f;
 
     private readonly HashSet<Rigidbody2D> processedBodies = new();
+
+    private const int BlackHoleSpriteSize = 64;
+    private static Sprite blackHoleSprite;
 
     private LineRenderer radiusLine;
     private Transform blackHoleTransform;
@@ -126,12 +129,11 @@ public class Anchor : MonoBehaviour
         blackHoleTransform.localRotation = Quaternion.identity;
         ApplyBlackHoleWorldScale();
 
-        // 黑色小圆
+        // 黑色圆点
         SpriteRenderer sr = holeObj.AddComponent<SpriteRenderer>();
-        sr.sprite = GetComponent<SpriteRenderer>() != null
-            ? GetComponent<SpriteRenderer>().sprite
-            : null;
+        sr.sprite = GetBlackHoleSprite();
         sr.color = Color.black;
+        sr.sortingOrder = short.MaxValue;
 
         // Trigger 检测
         CircleCollider2D col = holeObj.AddComponent<CircleCollider2D>();
@@ -161,6 +163,55 @@ public class Anchor : MonoBehaviour
             return targetWorldScale;
 
         return targetWorldScale / Mathf.Abs(parentScale);
+    }
+
+    private static Sprite GetBlackHoleSprite()
+    {
+        if (blackHoleSprite != null)
+            return blackHoleSprite;
+
+        Texture2D texture = new Texture2D(
+            BlackHoleSpriteSize,
+            BlackHoleSpriteSize,
+            TextureFormat.RGBA32,
+            false
+        );
+        texture.name = "BlackHoleCircle";
+        texture.filterMode = FilterMode.Bilinear;
+        texture.wrapMode = TextureWrapMode.Clamp;
+
+        Color[] pixels = new Color[BlackHoleSpriteSize * BlackHoleSpriteSize];
+        Vector2 center = new Vector2(
+            BlackHoleSpriteSize * 0.5f,
+            BlackHoleSpriteSize * 0.5f
+        );
+        float radius = BlackHoleSpriteSize * 0.5f - 1f;
+
+        for (int y = 0; y < BlackHoleSpriteSize; y++)
+        {
+            for (int x = 0; x < BlackHoleSpriteSize; x++)
+            {
+                float distance = Vector2.Distance(
+                    new Vector2(x + 0.5f, y + 0.5f),
+                    center
+                );
+                float alpha = Mathf.Clamp01(radius - distance + 1f);
+                pixels[y * BlackHoleSpriteSize + x] = new Color(1f, 1f, 1f, alpha);
+            }
+        }
+
+        texture.SetPixels(pixels);
+        texture.Apply();
+
+        blackHoleSprite = Sprite.Create(
+            texture,
+            new Rect(0f, 0f, BlackHoleSpriteSize, BlackHoleSpriteSize),
+            new Vector2(0.5f, 0.5f),
+            BlackHoleSpriteSize
+        );
+        blackHoleSprite.name = "BlackHoleCircle";
+
+        return blackHoleSprite;
     }
 
     private void FixedUpdate()

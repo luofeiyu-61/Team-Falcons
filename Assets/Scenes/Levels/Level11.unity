@@ -412,7 +412,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1753411883797049420, guid: 0efc5e7997e64474c934005e6afff8aa, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -15
+      value: -15.24
       objectReference: {fileID: 0}
     - target: {fileID: 1753411883797049420, guid: 0efc5e7997e64474c934005e6afff8aa, type: 3}
       propertyPath: m_LocalPosition.y
@@ -464,12 +464,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1797612642929829835, guid: 0efc5e7997e64474c934005e6afff8aa, type: 3}
       propertyPath: extendSpeed
-      value: 2.2
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2410327914861358123, guid: 0efc5e7997e64474c934005e6afff8aa, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 1093882858, guid: 85b6545add5efd34d9c2803732ab4dfd, type: 3}
+      objectReference: {fileID: 21300000, guid: fa8e75659a77454459d4a9d13ca85018, type: 3}
     - target: {fileID: 5329566225813515936, guid: 0efc5e7997e64474c934005e6afff8aa, type: 3}
       propertyPath: m_Name
       value: Piston (1)
@@ -3446,8 +3446,6 @@ MonoBehaviour:
   placementCost: 1
   maxActiveAnchors: 1
   refundWhenRemoved: 0
-  maxAttractCharges: 99
-  maxRepelCharges: 99
   anchorLayer:
     serializedVersion: 2
     m_Bits: 2147483647
@@ -3455,7 +3453,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   placementClearRadius: 0.25
-  selectedMode: 0
 --- !u!1001 &1763089682
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3589,10 +3586,6 @@ PrefabInstance:
       propertyPath: extendSpeed
       value: 2.2
       objectReference: {fileID: 0}
-    - target: {fileID: 2410327914861358123, guid: 0efc5e7997e64474c934005e6afff8aa, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 1490114716, guid: 85b6545add5efd34d9c2803732ab4dfd, type: 3}
     - target: {fileID: 3724409398884789556, guid: 0efc5e7997e64474c934005e6afff8aa, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.25
