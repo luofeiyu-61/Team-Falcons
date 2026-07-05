@@ -31,6 +31,8 @@ public class Anchor : MonoBehaviour
     [SerializeField, Min(0f)] private float blackHoleWorldScale = 0.18f;
     [SerializeField, Min(0f)] private float blackHoleTriggerRadius = 0.5f;
 
+    [SerializeField] private float maxTargetSpeed = 6f;
+
     private readonly HashSet<Rigidbody2D> processedBodies = new();
 
     private const int BlackHoleSpriteSize = 64;
