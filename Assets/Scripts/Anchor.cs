@@ -31,6 +31,10 @@ public class Anchor : MonoBehaviour
     [SerializeField, Min(0f)] private float blackHoleWorldScale = 0.15f;
     [SerializeField, Min(0f)] private float blackHoleTriggerRadius = 2f;
 
+    [Header("速度上限")]
+    [Tooltip("受力物体最大速度，防止高速穿墙")]
+    [SerializeField] private float maxTargetSpeed = 25f;
+
     private readonly HashSet<Rigidbody2D> processedBodies = new();
 
     private LineRenderer radiusLine;
@@ -213,6 +217,10 @@ public class Anchor : MonoBehaviour
                 direction * forceMagnitude,
                 ForceMode2D.Force
             );
+
+            // 限制最大速度，防止穿墙
+            if (body.velocity.magnitude > maxTargetSpeed)
+                body.velocity = body.velocity.normalized * maxTargetSpeed;
         }
     }
 

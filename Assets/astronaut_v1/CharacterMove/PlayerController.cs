@@ -91,33 +91,42 @@ public class PlayerController : MonoBehaviour
 
         UpdateFacing(moveInput.x);
     }
-    private AnchorManager anchorManager;
-    private float lastPlayerVelocityX;
+    [SerializeField] private float groundDeceleration = 70f;
+
+    private float inputVelX;
+    private float lastInputVelX;
 
     private void FixedUpdate()
     {
         if (isDead) return;
 
-        if (anchorManager == null)
-            anchorManager = FindObjectOfType<AnchorManager>();
-
         float horizontal = moveInput.x;
-        bool repelActive = anchorManager != null && anchorManager.HasActiveRepel();
 
-        float targetVelX = horizontal * moveSpeed;
-
-        // 空中且斥力激活：保留外部水平力（锚点推力），避免被玩家输入覆盖
-        // 地面时：直接设置速度，让物理自然处理接触，防止弹跳
-        if (repelActive && !isGrounded)
+        if (Mathf.Abs(horizontal) > MoveDeadZone)
         {
-            float externalX = rb.velocity.x - lastPlayerVelocityX;
-            rb.velocity = new Vector2(targetVelX + externalX, rb.velocity.y);
+            // —— 有输入：delta 方式，保留 Anchor AddForce 等外部力 ——
+            inputVelX = horizontal * moveSpeed;
+
+            float physicsVelX = rb.velocity.x;
+            float delta = inputVelX - lastInputVelX;
+            rb.velocity = new Vector2(physicsVelX + delta, rb.velocity.y);
+
+            // 撞墙：有输入但物理速度≈0 → 同步 lastInputVelX 避免松开时反弹
+            if (Mathf.Abs(inputVelX) > 0.1f && Mathf.Abs(physicsVelX) < 0.1f)
+                lastInputVelX = physicsVelX;
+            else
+                lastInputVelX = inputVelX;
         }
         else
         {
-            rb.velocity = new Vector2(targetVelX, rb.velocity.y);
+            // —— 无输入：直接减速 rb.velocity.x 到 0（传统 2D 手感）——
+            float decelX = Mathf.MoveTowards(
+                rb.velocity.x, 0f, groundDeceleration * Time.fixedDeltaTime);
+            rb.velocity = new Vector2(decelX, rb.velocity.y);
+            inputVelX = 0f;
+            lastInputVelX = 0f;
         }
-        lastPlayerVelocityX = targetVelX;
+
         animator.SetFloat("Walk", Mathf.Abs(horizontal) > MoveDeadZone ? moveSpeed : 0f);
     }
 
@@ -171,6 +180,8 @@ public class PlayerController : MonoBehaviour
         isDead = false;
         animator.ResetTrigger("dead");
         animator.Play("breath", 0, 0f);
+        inputVelX = 0f;
+        lastInputVelX = 0f;
     }
 
     private void SwitchCamera()
