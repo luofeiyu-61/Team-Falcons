@@ -11,7 +11,7 @@ namespace UI.Menu
         [SerializeField] private BackgroundController backgroundController;
         [SerializeField] private GameObject levelButtonPrefab;
         [SerializeField] private List<float> levelLayout;
-        public int levelCount; // start from 0
+        public int LevelCount => levelLayout.Count; // start from 0
         public RectTransform center;
 
         [Header("入场动画")]
@@ -47,18 +47,12 @@ namespace UI.Menu
 
         private void Awake()
         {
-            if (levelLayout.Count != levelCount)
-            {
-                Debug.LogError("Level layout element count does not match set level count.");
-                return;
-            }
-
-            for (int i = 0; i < levelCount; i++)
+            for (int i = 0; i < LevelCount; i++)
             {
                 levelIndexToRadius.Add(i, levelLayout[i]);
             }
             Dictionary<float, List<int>> groups = new();
-            for (int i = 0; i < levelCount; i++)
+            for (int i = 0; i < LevelCount; i++)
             {
                 var r = levelIndexToRadius[i];
                 if (!groups.Keys.Any(x => Mathf.Approximately(x, r)))
@@ -119,7 +113,7 @@ namespace UI.Menu
 
         private void CreateButtons()
         {
-            for (int i = 0; i < levelCount; i++)
+            for (int i = 0; i < LevelCount; i++)
             {
                 (int indexInGroup, int groupSize) groupInfo = levelIndexToGroup[i];
                 float step = groupInfo.groupSize == 1 ? 0 :

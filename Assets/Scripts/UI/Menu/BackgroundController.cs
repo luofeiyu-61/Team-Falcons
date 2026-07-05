@@ -9,7 +9,7 @@ namespace UI.Menu
     public class BackgroundController : MonoBehaviour
     {
         [SerializeField] private List<Image> backgrounds = new();
-        [SerializeField] private List<MosaicBlurTransitionEffect> transitionEffects = new();
+        [SerializeField] private MosaicBlurTransitionEffect transitionEffect;
         [SerializeField] private LevelList levelList;
 
         private bool blur = false;
@@ -40,24 +40,18 @@ namespace UI.Menu
         
         public void BlurBackground(bool reverse = false)
         {
-            foreach (var effect in transitionEffects)
-            {
-                if (reverse)
-                    effect.PlayBlurReverse();
-                else
-                    effect.PlayBlurForward();
-            }
+            if (reverse)
+                transitionEffect.PlayBlurReverse();
+            else
+                transitionEffect.PlayBlurForward();
         }
 
         public void MosaicBackground(bool reverse = false, UnityAction<(bool blur, bool reverse)> callback = null)
         {
-            foreach (var effect in transitionEffects)
-            {
-                if (reverse)
-                    effect.PlayMosaicReverse(callback);
-                else
-                    effect.PlayMosaicForward(callback);
-            }
+            if (reverse)
+                transitionEffect.PlayMosaicReverse(callback);
+            else
+                transitionEffect.PlayMosaicForward(callback);
         }
 
         public void SelectLevel(int level)
