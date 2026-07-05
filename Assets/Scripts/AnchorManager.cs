@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UI.InGame;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 
 public class AnchorManager : MonoBehaviour
 {
@@ -16,8 +17,8 @@ public class AnchorManager : MonoBehaviour
     [SerializeField] private bool refundWhenRemoved = false;
 
     [Header("持有上限")]
-    [SerializeField] private int maxAttractCharges = 99;
-    [SerializeField] private int maxRepelCharges = 99;
+    [SerializeField] private int maxAttractCharges = 4;
+    [SerializeField] private int maxRepelCharges = 4;
 
     [Header("放置限制")]
     [SerializeField] private LayerMask anchorLayer;
@@ -31,7 +32,8 @@ public class AnchorManager : MonoBehaviour
     private int repelCharges;
     private bool attractUnlocked = false;
     private bool repelUnlocked = false;
-    private BatterySlots batterySlots;
+
+    public BatterySlots BatterySlots { private get; set; }
 
     private readonly List<Anchor> activeAnchors = new();
 
@@ -41,7 +43,7 @@ public class AnchorManager : MonoBehaviour
         private set
         {
             attractCharges = value;
-            batterySlots.BlueCount = attractCharges;
+            BatterySlots.BlueCount = attractCharges;
         }
     }
     public int RepelCharges
@@ -50,7 +52,7 @@ public class AnchorManager : MonoBehaviour
         private set
         {
             repelCharges = value;
-            batterySlots.RedCount = repelCharges;
+            BatterySlots.RedCount = repelCharges;
         }
     }
     
@@ -77,11 +79,8 @@ public class AnchorManager : MonoBehaviour
 
     private void Start()
     {
-        if (batterySlots == null)
-            batterySlots = GameObject.Find("BatterySlots").GetComponent<BatterySlots>();
-
         // 同步 UI 最大显示值与持有上限
-        batterySlots.MaxCount = Mathf.Max(maxAttractCharges, maxRepelCharges);
+        BatterySlots.MaxCount = Mathf.Max(maxAttractCharges, maxRepelCharges);
 
         // 初始额度为零，需要拾取道具才能获得
         AttractCharges = 0;
@@ -148,6 +147,7 @@ public class AnchorManager : MonoBehaviour
                 selectedMode = AnchorMode.Repel;
             else if (selectedMode == AnchorMode.Repel && attractUnlocked)
                 selectedMode = AnchorMode.Attract;
+            BatterySlots.HandleInputSelection(selectedMode);
         }
 
         if (Input.GetMouseButtonDown(0))
@@ -231,6 +231,7 @@ public class AnchorManager : MonoBehaviour
             selectedMode = AnchorMode.Repel;
         else if (selectedMode == AnchorMode.Repel && RepelCharges == 0 && attractUnlocked && AttractCharges > 0)
             selectedMode = AnchorMode.Attract;
+        BatterySlots.HandleInputSelection(selectedMode);
     }
 
     private Vector2 GetMouseWorldPosition()
