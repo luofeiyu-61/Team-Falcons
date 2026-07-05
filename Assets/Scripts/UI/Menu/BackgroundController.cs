@@ -72,7 +72,7 @@ namespace UI.Menu
             var maskEffect = Camera.main!.GetComponent<CircleMaskCameraEffect>();
             maskEffect.PlayForward();
             yield return new WaitForSeconds(maskEffect.duration);
-            LevelController.LoadLevel(level);
+            LevelController.LoadLevel($"Level{level}");
         }
     }
 }
