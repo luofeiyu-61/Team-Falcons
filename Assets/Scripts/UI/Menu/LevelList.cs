@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,9 +10,9 @@ namespace UI.Menu
     {
         [SerializeField] private BackgroundController backgroundController;
         [SerializeField] private GameObject levelButtonPrefab;
-        public int levelCount;
+        [SerializeField] private List<float> levelLayout;
+        public int levelCount; // start from 0
         public RectTransform center;
-        public float radius;
 
         [Header("入场动画")]
         [SerializeField] private float appearDelay = 0.1f;
@@ -23,6 +24,8 @@ namespace UI.Menu
         [SerializeField] private float disappearDuration = 0.4f;
 
         private readonly List<Button> buttons = new();
+        private readonly Dictionary<int, float> levelIndexToRadius = new();
+        private readonly Dictionary<int, (int indexInGroup, int groupSize)> levelIndexToGroup = new();
         private readonly List<RectTransform> buttonRects = new();
         private readonly List<Vector3> buttonTargetPositions = new();
         private bool initialized;
@@ -44,6 +47,39 @@ namespace UI.Menu
 
         private void Awake()
         {
+            if (levelLayout.Count != levelCount)
+            {
+                Debug.LogError("Level layout element count does not match set level count.");
+                return;
+            }
+
+            for (int i = 0; i < levelCount; i++)
+            {
+                levelIndexToRadius.Add(i, levelLayout[i]);
+            }
+            Dictionary<float, List<int>> groups = new();
+            for (int i = 0; i < levelCount; i++)
+            {
+                var r = levelIndexToRadius[i];
+                if (!groups.Keys.Any(x => Mathf.Approximately(x, r)))
+                {
+                    groups.Add(r, new List<int>());
+                }
+                groups.First(kvp => Mathf.Approximately(kvp.Key, r)).Value.Add(i);
+            }
+            foreach (var group in groups)
+            {
+                group.Value.Sort();
+            }
+            foreach (var group in groups)
+            {
+                for (var i = 0; i < group.Value.Count; i++)
+                {
+                    int levelIndex = group.Value[i];
+                    levelIndexToGroup.Add(levelIndex, (i, group.Value.Count));
+                }
+            }
+            
             buttons.Clear();
             buttonRects.Clear();
             buttonTargetPositions.Clear();
@@ -83,11 +119,14 @@ namespace UI.Menu
 
         private void CreateButtons()
         {
-            // Semi-circle distribution of buttons（使用局部坐标，兼容 Screen Space - Camera 模式）
-            float step = Mathf.PI / (levelCount - 1);
             for (int i = 0; i < levelCount; i++)
             {
-                float angle = Mathf.PI + step * i;
+                (int indexInGroup, int groupSize) groupInfo = levelIndexToGroup[i];
+                float step = groupInfo.groupSize == 1 ? 0 :
+                    Mathf.PI * 4 / 3 / (groupInfo.groupSize - 1);
+                float radius = levelIndexToRadius[i];
+                float angle = step == 0 ? Mathf.PI * 3 / 2 :
+                    Mathf.PI * 5 / 6 + step * groupInfo.indexInGroup;
                 Vector3 localPos = new Vector3(
                     center.localPosition.x + radius * Mathf.Cos(angle),
                     center.localPosition.y + radius * Mathf.Sin(angle),
@@ -95,7 +134,7 @@ namespace UI.Menu
                 );
                 var levelButton = Instantiate(levelButtonPrefab, transform, false);
                 levelButton.transform.localPosition = localPos;
-                levelButton.GetComponent<LevelButton>().Setup(i + 1, backgroundController);
+                levelButton.GetComponent<LevelButton>().Setup(i, backgroundController);
                 buttons.Add(levelButton.GetComponent<Button>());
                 buttonRects.Add(levelButton.GetComponent<RectTransform>());
                 buttonTargetPositions.Add(localPos);

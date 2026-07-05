@@ -1,5 +1,9 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace UI.InGame
@@ -14,6 +18,7 @@ namespace UI.InGame
         private RectTransform redRect;
         [SerializeField] private GameObject blueObject;
         [SerializeField] private GameObject redObject;
+        [SerializeField] private GameObject arrow;
         
         [SerializeField] private float batteryWidth;
 
@@ -31,12 +36,12 @@ namespace UI.InGame
                 if (blueCount <= 0)
                 {
                     blueCount = 0;
-                    blueObject.SetActive(false);
+                    BlueActive = false;
                 }
                 else if (!blueObject.activeSelf)
                 {
                     gameObject.SetActive(true);
-                    blueObject.SetActive(true);
+                    BlueActive = true;
                 }
             }
         }
@@ -53,12 +58,12 @@ namespace UI.InGame
                 if (redCount <= 0)
                 {
                     redCount = 0;
-                    redObject.SetActive(false);
+                    RedActive = false;
                 }
                 else if (!redObject.activeSelf)
                 {
                     gameObject.SetActive(true);
-                    redObject.SetActive(true);
+                    RedActive = true;
                 }
             }
         }
@@ -69,7 +74,7 @@ namespace UI.InGame
             set
             {
                 blueObject.SetActive(value);
-                if (!redObject.activeSelf)
+                if (!value && !redObject.activeSelf)
                 {
                     gameObject.SetActive(false);
                 }
@@ -82,7 +87,7 @@ namespace UI.InGame
             set
             {
                 redObject.SetActive(value);
-                if (!blueObject.activeSelf)
+                if (!value && !blueObject.activeSelf)
                 {
                     gameObject.SetActive(false);
                 }
@@ -93,12 +98,19 @@ namespace UI.InGame
         {
             blueRect  = blueMask.rectTransform;
             redRect = redMask.rectTransform;
+
+            SceneManager.sceneLoaded += BindAnchorManager;
+
         }
-        
+
+        private void OnDestroy()
+        {
+            SceneManager.sceneLoaded -= BindAnchorManager;
+        }
+
         private void Start()
         {
-            BlueCount = 0;
-            RedCount = 0;
+            
         }
 
         private void Update()
@@ -122,6 +134,54 @@ namespace UI.InGame
             {
                 RedCount--;
             }
+        }
+
+        public void HandleInputSelection(AnchorMode mode)
+        {
+            StopAllCoroutines();
+            if (mode == AnchorMode.Attract)
+            {
+                StartCoroutine(MoveArrowCoroutine(blueObject.transform.localPosition.y, 500f));
+            }
+            else
+            {
+                StartCoroutine(MoveArrowCoroutine(redObject.transform.localPosition.y, 500f));
+            }
+        }
+
+        private IEnumerator MoveArrowCoroutine(float yDest, float speed)
+        {
+            Vector3 startPos = arrow.transform.localPosition;
+            Vector3 endPos = new Vector3(startPos.x, yDest, startPos.z);
+            float distance = Vector3.Distance(startPos, endPos);
+            if (Mathf.Approximately(distance, 0f))
+            {
+                yield break;
+            }
+            
+            float duration = distance / speed;
+            float elapsedTime = 0f;
+
+            while (elapsedTime < duration)
+            {
+                elapsedTime += Time.deltaTime;
+                float t = Mathf.Clamp01(elapsedTime / duration);
+                arrow.transform.localPosition = Vector3.Lerp(startPos, endPos, t);
+                yield return null;
+            }
+
+            arrow.transform.localPosition = endPos;
+        }
+
+        private void BindAnchorManager(Scene scene, LoadSceneMode mode)
+        {
+            var gm = GameObject.Find("GameManager");
+            if (!gm)
+            {
+                Debug.LogError("No game manager found");
+                return;
+            }
+            gm.GetComponent<AnchorManager>().BatterySlots = this;
         }
     }
 }

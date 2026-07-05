@@ -724,13 +724,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backgroundController: {fileID: 183277847}
   levelButtonPrefab: {fileID: 6846462137044537802, guid: 503315f92d4cabb4ca9994437da12871, type: 3}
-  levelCount: 6
+  levelLayout:
+  - 430
+  - 430
+  - 430
+  - 430
+  - 430
+  - 430
+  - 430
+  - 430
+  - 430
+  - 215
+  - 215
+  - 215
+  - 215
+  - 215
+  - -215
+  levelCount: 15
   center: {fileID: 826900696}
-  radius: 430
-  appearDelay: 0.1
-  appearDuration: 0.6
+  appearDelay: 0.05
+  appearDuration: 0.5
   floatHeight: 60
-  disappearDelay: 0.08
+  disappearDelay: 0.04
   disappearDuration: 0.4
 --- !u!1 &1438584640
 GameObject:
