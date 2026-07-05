@@ -264,6 +264,10 @@ public class Anchor : MonoBehaviour
                 direction * forceMagnitude,
                 ForceMode2D.Force
             );
+
+            // 限制最大速度，防止穿墙
+            if (body.velocity.magnitude > maxTargetSpeed)
+                body.velocity = body.velocity.normalized * maxTargetSpeed;
         }
     }
 

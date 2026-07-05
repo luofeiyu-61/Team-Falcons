@@ -5,7 +5,6 @@ public class PlayerController2D : MonoBehaviour
     [Header("移动")]
     [SerializeField] private float maxMoveSpeed = 7f;
     [SerializeField] private float acceleration = 55f;
-    [SerializeField] private float deceleration = 70f;
 
     [Header("跳跃")]
     [SerializeField] private float jumpSpeed = 12f;
@@ -28,6 +27,8 @@ public class PlayerController2D : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        // 防止高速时穿墙：开启连续碰撞检测
+        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
     }
 
     private void Update()
@@ -89,16 +90,20 @@ public class PlayerController2D : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // 无水平输入时不覆写 X 速度，保留外部力（引力/斥力）累积的速度
+        if (Mathf.Abs(horizontalInput) < 0.01f)
+            return;
+
         float targetSpeed = horizontalInput * maxMoveSpeed;
 
-        float rate = Mathf.Abs(targetSpeed) > 0.01f
-            ? acceleration
-            : deceleration;
+        // 当前速度超过默认移动速度时不覆写，保留外部力效果
+        if (Mathf.Abs(rb.velocity.x) > maxMoveSpeed)
+            return;
 
         float newX = Mathf.MoveTowards(
             rb.velocity.x,
             targetSpeed,
-            rate * Time.fixedDeltaTime
+            acceleration * Time.fixedDeltaTime
         );
 
         rb.velocity = new Vector2(newX, rb.velocity.y);
