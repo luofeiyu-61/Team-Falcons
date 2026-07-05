@@ -178,7 +178,6 @@ namespace UI.InGame
             var gm = GameObject.Find("GameManager");
             if (!gm)
             {
-                Debug.LogError("No game manager found");
                 return;
             }
             gm.GetComponent<AnchorManager>().BatterySlots = this;
