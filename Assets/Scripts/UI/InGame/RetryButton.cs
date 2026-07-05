@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace UI.InGame
 {
@@ -6,7 +7,14 @@ namespace UI.InGame
     {
         public void OnRetryButtonClicked()
         {
+            Deselect();
             LevelController.RestartCurrentLevel();
+        }
+
+        private void Deselect()
+        {
+            if (EventSystem.current != null)
+                EventSystem.current.SetSelectedGameObject(null);
         }
     }
 }
