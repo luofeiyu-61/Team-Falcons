@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 namespace UI.InGame
@@ -7,7 +8,14 @@ namespace UI.InGame
     {
         public void OnMenuButtonClicked()
         {
+            Deselect();
             SceneManager.LoadScene("Menu");
+        }
+
+        private void Deselect()
+        {
+            if (EventSystem.current != null)
+                EventSystem.current.SetSelectedGameObject(null);
         }
     }
 }

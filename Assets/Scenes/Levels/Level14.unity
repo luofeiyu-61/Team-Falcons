@@ -338,6 +338,10 @@ PrefabInstance:
       propertyPath: dropDistance
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 3004684543096429421, guid: b70f5705a1fda114b883745ec1a627aa, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3004684543096429423, guid: b70f5705a1fda114b883745ec1a627aa, type: 3}
       propertyPath: m_Name
       value: DropPlatform (1)
@@ -3895,8 +3899,6 @@ MonoBehaviour:
   placementCost: 1
   maxActiveAnchors: 1
   refundWhenRemoved: 0
-  maxAttractCharges: 99
-  maxRepelCharges: 99
   anchorLayer:
     serializedVersion: 2
     m_Bits: 2147483647
@@ -3904,7 +3906,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   placementClearRadius: 0.25
-  selectedMode: 1
 --- !u!1001 &1627194545
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4361,6 +4362,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 0c081ae209a509f4fb25d5bc259461b8, type: 3}
+    - target: {fileID: 3004684543096429421, guid: b70f5705a1fda114b883745ec1a627aa, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3004684543096429423, guid: b70f5705a1fda114b883745ec1a627aa, type: 3}
       propertyPath: m_Name
       value: DropPlatform (2)

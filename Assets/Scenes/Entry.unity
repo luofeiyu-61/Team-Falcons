@@ -258,8 +258,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 1391274898}
-  menuMusic: {fileID: 8300000, guid: 1933d47a3c3019f40b0dcf965fda2dc1, type: 3}
-  inGameMusic: {fileID: 8300000, guid: 4b3721591c385354cb0e0580ebdae8fa, type: 3}
+  menuMusic: {fileID: 8300000, guid: 4b3721591c385354cb0e0580ebdae8fa, type: 3}
+  inGameMusic: {fileID: 8300000, guid: 1d2f218e92da31142816949034d8f956, type: 3}
 --- !u!114 &1391274897
 MonoBehaviour:
   m_ObjectHideFlags: 0
