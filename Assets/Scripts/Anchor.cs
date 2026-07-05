@@ -23,6 +23,10 @@ public class Anchor : MonoBehaviour
     [SerializeField] private float minDistance = 0.2f;
     [SerializeField] private LayerMask targetLayer;
 
+    [Header("速度上限")]
+    [Tooltip("受力物体最大速度，防止高速穿墙")]
+    [SerializeField] private float maxTargetSpeed = 25f;
+
     private readonly HashSet<Rigidbody2D> processedBodies = new();
 
     private LineRenderer radiusLine;
@@ -160,6 +164,10 @@ public class Anchor : MonoBehaviour
                 direction * forceMagnitude,
                 ForceMode2D.Force
             );
+
+            // 限制最大速度，防止穿墙
+            if (body.velocity.magnitude > maxTargetSpeed)
+                body.velocity = body.velocity.normalized * maxTargetSpeed;
         }
     }
 
