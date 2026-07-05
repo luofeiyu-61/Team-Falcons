@@ -123,3 +123,4 @@ MonoBehaviour:
     m_Bits: 8
   blackHoleWorldScale: 0.4
   blackHoleTriggerRadius: 0.5
+  maxTargetSpeed    : 20

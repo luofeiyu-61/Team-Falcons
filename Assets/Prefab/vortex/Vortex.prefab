@@ -124,6 +124,7 @@ MonoBehaviour:
     m_Bits: 8
   blackHoleWorldScale: 0.4
   blackHoleTriggerRadius: 0.5
+  maxTargetSpeed: 20
 --- !u!58 &8244750305851126991
 CircleCollider2D:
   m_ObjectHideFlags: 0

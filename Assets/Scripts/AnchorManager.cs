@@ -51,6 +51,8 @@ public class AnchorManager : MonoBehaviour
         {
             attractCharges = value;
             BatterySlots.BlueCount = attractCharges;
+            if (SelectedMode == AnchorMode.Attract && AttractCharges == 0 && repelUnlocked && RepelCharges > 0)
+                SelectedMode = AnchorMode.Repel;
         }
     }
     public int RepelCharges
@@ -60,6 +62,8 @@ public class AnchorManager : MonoBehaviour
         {
             repelCharges = value;
             BatterySlots.RedCount = repelCharges;
+            if (SelectedMode == AnchorMode.Repel && RepelCharges == 0 && attractUnlocked && AttractCharges > 0)
+                SelectedMode = AnchorMode.Attract;
         }
     }
     
@@ -233,10 +237,13 @@ public class AnchorManager : MonoBehaviour
         activeAnchors.Clear();
 
         // 撤销锚点后自动切枪：当前模式没余额时才切到另一边
-        if (SelectedMode == AnchorMode.Attract && AttractCharges == 0 && repelUnlocked && RepelCharges > 0)
-            SelectedMode = AnchorMode.Repel;
-        else if (SelectedMode == AnchorMode.Repel && RepelCharges == 0 && attractUnlocked && AttractCharges > 0)
-            SelectedMode = AnchorMode.Attract;
+        if (refundWhenRemoved)
+        {
+            if (SelectedMode == AnchorMode.Attract && AttractCharges == 0 && repelUnlocked && RepelCharges > 0)
+                SelectedMode = AnchorMode.Repel;
+            else if (SelectedMode == AnchorMode.Repel && RepelCharges == 0 && attractUnlocked && AttractCharges > 0)
+                SelectedMode = AnchorMode.Attract;
+        }
     }
 
     private Vector2 GetMouseWorldPosition()

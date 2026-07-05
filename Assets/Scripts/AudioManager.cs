@@ -35,7 +35,7 @@ public class AudioManager : MonoSingleton<AudioManager>
     public IEnumerator SwitchMusicCoroutine(float from, float to, float duration, AudioClip newClip = null)
     {
         if (_switchingMusic)
-            yield break;
+            yield return null;
 
         _switchingMusic = true;
         float elapsedTime = 0f;
@@ -64,13 +64,15 @@ public class AudioManager : MonoSingleton<AudioManager>
 
     private void HandleSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (audioSource.isPlaying && !_switchingMusic)
+        /*if (audioSource.isPlaying && !_switchingMusic)
         {
             StopMusic(2f);
-        }
+        }*/
         
         if (scene.name.Contains("Menu"))
         {
+            if (previousSceneName != "Entry")
+                StopMusic(2f);
             PlayMenuMusic(2f);
         }
         else if (previousSceneName.Contains("Menu"))
@@ -79,5 +81,13 @@ public class AudioManager : MonoSingleton<AudioManager>
         }
         
         previousSceneName = scene.name;
+    }
+
+    public void OnSelectLevel()
+    {
+        if (previousSceneName.Contains("Menu"))
+        {
+            StopMusic(2f);
+        }
     }
 }
