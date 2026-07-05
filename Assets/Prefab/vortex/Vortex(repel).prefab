@@ -122,4 +122,4 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   blackHoleWorldScale: 0.4
-  blackHoleTriggerRadius: 2
+  blackHoleTriggerRadius: 0.5

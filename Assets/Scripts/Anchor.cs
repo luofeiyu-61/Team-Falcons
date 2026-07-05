@@ -29,7 +29,7 @@ public class Anchor : MonoBehaviour
 
     [Header("黑洞中心")]
     [SerializeField, Min(0f)] private float blackHoleWorldScale = 0.18f;
-    [SerializeField, Min(0f)] private float blackHoleTriggerRadius = 2f;
+    [SerializeField, Min(0f)] private float blackHoleTriggerRadius = 0.5f;
 
     private readonly HashSet<Rigidbody2D> processedBodies = new();
 
