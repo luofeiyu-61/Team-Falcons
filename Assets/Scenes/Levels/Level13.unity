@@ -214,7 +214,7 @@ GameObject:
   - component: {fileID: 172475823}
   - component: {fileID: 172475822}
   - component: {fileID: 172475821}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Tilemap
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -3201,7 +3201,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ffd016766506c2418ee5f199072b99a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelIndex: 4
+  levelIndex: 13
   playerRespawn: {fileID: 241970199}
   initialSpawnPoint: {fileID: 490180871}
   respawnDelay: 1

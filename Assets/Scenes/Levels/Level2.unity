@@ -1014,14 +1014,16 @@ MonoBehaviour:
   attractAnchorPrefab: {fileID: 5203719689247514081, guid: 06010b4fae3a5d84c9cccf8c1e3deeb4, type: 3}
   repelAnchorPrefab: {fileID: 7835544658520123351, guid: b0eb7f47970c9334da1c6fa1b259cba7, type: 3}
   placementCost: 1
-  maxActiveAnchors: 3
+  maxActiveAnchors: 1
   refundWhenRemoved: 0
+  maxAttractCharges: 99
+  maxRepelCharges: 99
   anchorLayer:
     serializedVersion: 2
     m_Bits: 2147483647
   blockedLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   placementClearRadius: 0.25
   selectedMode: 0
 --- !u!1 &1026920765
