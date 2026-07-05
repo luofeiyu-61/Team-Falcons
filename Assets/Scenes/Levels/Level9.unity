@@ -1553,7 +1553,7 @@ GameObject:
   - component: {fileID: 955569641}
   - component: {fileID: 955569640}
   - component: {fileID: 955569639}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Tilemap
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -9508,8 +9508,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1354797515}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.81, y: -1.0217, z: 0}
-  m_LocalScale: {x: 3.2143285, y: 2.5575, z: 1}
+  m_LocalPosition: {x: -5.81, y: -1.1485, z: 0}
+  m_LocalScale: {x: 3.2143285, y: 2.5843534, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -9752,7 +9752,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1508070216
 MonoBehaviour:
