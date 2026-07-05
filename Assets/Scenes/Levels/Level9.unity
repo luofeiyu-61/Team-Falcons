@@ -293,7 +293,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 59
+  m_RootOrder: 60
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &186822617 stripped
 Transform:
@@ -8619,7 +8619,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 58
+  m_RootOrder: 59
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &988242624
 PrefabInstance:
@@ -9513,7 +9513,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 55
+  m_RootOrder: 56
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1361304845
 PrefabInstance:
@@ -9703,7 +9703,7 @@ Transform:
   m_Children:
   - {fileID: 686351351}
   m_Father: {fileID: 0}
-  m_RootOrder: 57
+  m_RootOrder: 58
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1508070213
 GameObject:
@@ -9735,7 +9735,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ffd016766506c2418ee5f199072b99a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelIndex: 4
+  levelIndex: 9
   playerRespawn: {fileID: 241970199}
   initialSpawnPoint: {fileID: 186822617}
   respawnDelay: 1
@@ -9752,7 +9752,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1508070216
 MonoBehaviour:
@@ -9772,6 +9772,8 @@ MonoBehaviour:
   placementCost: 1
   maxActiveAnchors: 1
   refundWhenRemoved: 0
+  maxAttractCharges: 99
+  maxRepelCharges: 99
   anchorLayer:
     serializedVersion: 2
     m_Bits: 2147483647
@@ -9906,7 +9908,7 @@ Transform:
   m_Children:
   - {fileID: 1690758137}
   m_Father: {fileID: 0}
-  m_RootOrder: 56
+  m_RootOrder: 57
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1556554429
 PrefabInstance:
@@ -10609,7 +10611,7 @@ Transform:
   m_Children:
   - {fileID: 955569638}
   m_Father: {fileID: 0}
-  m_RootOrder: 54
+  m_RootOrder: 55
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1987637043
 PrefabInstance:

@@ -632,7 +632,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ffd016766506c2418ee5f199072b99a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelIndex: 4
+  levelIndex: 12
   playerRespawn: {fileID: 241970199}
   initialSpawnPoint: {fileID: 1878842099}
   respawnDelay: 1
@@ -669,6 +669,8 @@ MonoBehaviour:
   placementCost: 1
   maxActiveAnchors: 1
   refundWhenRemoved: 0
+  maxAttractCharges: 99
+  maxRepelCharges: 99
   anchorLayer:
     serializedVersion: 2
     m_Bits: 2147483647
