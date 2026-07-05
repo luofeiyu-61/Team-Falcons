@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 1329212922049749058}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 9.75, y: 2.59, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -101,7 +101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cycleDuration: 0.5
   pauseDuration: 2
-  radius: 0.5
+  radius: 2
 --- !u!114 &1329212922049749118
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,13 +115,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mode: 0
-  effectRadius: 12
+  effectRadius: 4
   gravitationalConstant: 450
   anchorMass: 1
   minDistance: 0.2
   targetLayer:
     serializedVersion: 2
     m_Bits: 8
+  blackHoleWorldScale: 0.15
+  blackHoleTriggerRadius: 2
 --- !u!58 &2895321811415927120
 CircleCollider2D:
   m_ObjectHideFlags: 0

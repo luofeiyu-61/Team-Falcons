@@ -1,6 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Serialization;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public enum AnchorMode
 {
@@ -26,10 +30,14 @@ public class Anchor : MonoBehaviour
     [Header("速度上限")]
     [Tooltip("受力物体最大速度，防止高速穿墙")]
     [SerializeField] private float maxTargetSpeed = 25f;
+    [Header("黑洞中心")]
+    [SerializeField, Min(0f)] private float blackHoleWorldScale = 0.15f;
+    [SerializeField, Min(0f)] private float blackHoleTriggerRadius = 2f;
 
     private readonly HashSet<Rigidbody2D> processedBodies = new();
 
     private LineRenderer radiusLine;
+    private Transform blackHoleTransform;
 
     public void SetMode(AnchorMode newMode)
     {
@@ -48,6 +56,11 @@ public class Anchor : MonoBehaviour
         CreateBlackHole();
     }
 
+    private void LateUpdate()
+    {
+        ApplyBlackHoleWorldScale();
+    }
+
     private void CreateRadiusLine()
     {
         GameObject lineObj = new GameObject("RadiusVisual");
@@ -57,7 +70,22 @@ public class Anchor : MonoBehaviour
         radiusLine.useWorldSpace = true;
         radiusLine.loop = true;
         radiusLine.widthMultiplier = 0.05f;
-        radiusLine.sortingOrder = 10;
+        radiusLine.sortingOrder = short.MaxValue;
+        radiusLine.numCapVertices = 4;
+        radiusLine.numCornerVertices = 4;
+
+        Shader shader = Shader.Find("Hidden/Internal-Colored");
+        if (shader == null)
+            shader = Shader.Find("Sprites/Default");
+
+        Material radiusMaterial = new Material(shader);
+        radiusMaterial.renderQueue = 5000;
+        radiusMaterial.SetInt("_SrcBlend", (int)BlendMode.SrcAlpha);
+        radiusMaterial.SetInt("_DstBlend", (int)BlendMode.OneMinusSrcAlpha);
+        radiusMaterial.SetInt("_Cull", (int)CullMode.Off);
+        radiusMaterial.SetInt("_ZWrite", 0);
+        radiusMaterial.SetInt("_ZTest", (int)CompareFunction.Always);
+        radiusLine.material = radiusMaterial;
 
         // 64 个点拼成圆（世界坐标，不受父物体缩放影响）
         int segments = 64;
@@ -83,8 +111,8 @@ public class Anchor : MonoBehaviour
             return;
 
         radiusLine.startColor = mode == AnchorMode.Attract
-            ? Color.red    // 正红色
-            : Color.blue;  // 正蓝色
+            ? Color.blue    // 正红色
+            : Color.red;  // 正蓝色
         radiusLine.endColor = radiusLine.startColor;
     }
 
@@ -95,7 +123,11 @@ public class Anchor : MonoBehaviour
             return;
 
         GameObject holeObj = new GameObject("BlackHole");
-        holeObj.transform.SetParent(transform, false);
+        blackHoleTransform = holeObj.transform;
+        blackHoleTransform.SetParent(transform, false);
+        blackHoleTransform.localPosition = Vector3.zero;
+        blackHoleTransform.localRotation = Quaternion.identity;
+        ApplyBlackHoleWorldScale();
 
         // 黑色小圆
         SpriteRenderer sr = holeObj.AddComponent<SpriteRenderer>();
@@ -103,15 +135,35 @@ public class Anchor : MonoBehaviour
             ? GetComponent<SpriteRenderer>().sprite
             : null;
         sr.color = Color.black;
-        holeObj.transform.localScale = new Vector3(0.3f, 0.3f, 1f);
 
         // Trigger 检测
         CircleCollider2D col = holeObj.AddComponent<CircleCollider2D>();
         col.isTrigger = true;
-        col.radius = 2f;
+        col.radius = blackHoleTriggerRadius;
 
         // 挂载 BlackHole 脚本
         holeObj.AddComponent<BlackHole>();
+    }
+
+    private void ApplyBlackHoleWorldScale()
+    {
+        if (blackHoleTransform == null)
+            return;
+
+        Vector3 parentScale = transform.lossyScale;
+        blackHoleTransform.localScale = new Vector3(
+            GetCompensatedLocalScale(blackHoleWorldScale, parentScale.x),
+            GetCompensatedLocalScale(blackHoleWorldScale, parentScale.y),
+            1f
+        );
+    }
+
+    private static float GetCompensatedLocalScale(float targetWorldScale, float parentScale)
+    {
+        if (Mathf.Approximately(parentScale, 0f))
+            return targetWorldScale;
+
+        return targetWorldScale / Mathf.Abs(parentScale);
     }
 
     private void FixedUpdate()
@@ -173,9 +225,17 @@ public class Anchor : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.DrawWireSphere(
-            transform.position,
-            effectRadius
-        );
+#if UNITY_EDITOR
+        Color radiusColor = mode == AnchorMode.Attract ? Color.red : Color.blue;
+        Color previousColor = Handles.color;
+        CompareFunction previousZTest = Handles.zTest;
+
+        Handles.color = radiusColor;
+        Handles.zTest = CompareFunction.Always;
+        Handles.DrawWireDisc(transform.position, Vector3.forward, effectRadius);
+
+        Handles.color = previousColor;
+        Handles.zTest = previousZTest;
+#endif
     }
 }

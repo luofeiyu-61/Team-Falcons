@@ -194,7 +194,7 @@ GameObject:
   - component: {fileID: 371170177}
   - component: {fileID: 371170176}
   - component: {fileID: 371170175}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Tilemap
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -1410,6 +1410,8 @@ MonoBehaviour:
   placementCost: 1
   maxActiveAnchors: 1
   refundWhenRemoved: 0
+  maxAttractCharges: 99
+  maxRepelCharges: 99
   anchorLayer:
     serializedVersion: 2
     m_Bits: 2147483647

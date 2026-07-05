@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UI.InGame;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 
 public class AnchorManager : MonoBehaviour
 {
@@ -15,23 +16,31 @@ public class AnchorManager : MonoBehaviour
     [SerializeField] private int maxActiveAnchors = 1;
     [SerializeField] private bool refundWhenRemoved = false;
 
-    [Header("持有上限")]
-    [SerializeField] private int maxAttractCharges = 99;
-    [SerializeField] private int maxRepelCharges = 99;
+    private int maxAttractCharges = 4;
+    private int maxRepelCharges = 4;
 
     [Header("放置限制")]
     [SerializeField] private LayerMask anchorLayer;
     [SerializeField] private LayerMask blockedLayer;
     [SerializeField] private float placementClearRadius = 0.25f;
 
-    [Header("锚点模式")]
-    [SerializeField] private AnchorMode selectedMode = AnchorMode.Attract;
+    private AnchorMode selectedMode = AnchorMode.Attract;
+    private AnchorMode SelectedMode
+    {
+        get => selectedMode;
+        set
+        {
+            selectedMode = value;
+            BatterySlots.HandleInputSelection(selectedMode);
+        }
+    }
 
     private int attractCharges;
     private int repelCharges;
     private bool attractUnlocked = false;
     private bool repelUnlocked = false;
-    private BatterySlots batterySlots;
+
+    public BatterySlots BatterySlots { private get; set; }
 
     private readonly List<Anchor> activeAnchors = new();
 
@@ -41,7 +50,7 @@ public class AnchorManager : MonoBehaviour
         private set
         {
             attractCharges = value;
-            batterySlots.BlueCount = attractCharges;
+            BatterySlots.BlueCount = attractCharges;
         }
     }
     public int RepelCharges
@@ -50,11 +59,11 @@ public class AnchorManager : MonoBehaviour
         private set
         {
             repelCharges = value;
-            batterySlots.RedCount = repelCharges;
+            BatterySlots.RedCount = repelCharges;
         }
     }
     
-    public int RemainingCharges => selectedMode == AnchorMode.Attract
+    public int RemainingCharges => SelectedMode == AnchorMode.Attract
         ? attractCharges
         : repelCharges;
     public int ActiveAnchorCount => activeAnchors.Count;
@@ -77,11 +86,8 @@ public class AnchorManager : MonoBehaviour
 
     private void Start()
     {
-        if (batterySlots == null)
-            batterySlots = GameObject.Find("BatterySlots").GetComponent<BatterySlots>();
-
         // 同步 UI 最大显示值与持有上限
-        batterySlots.MaxCount = Mathf.Max(maxAttractCharges, maxRepelCharges);
+        BatterySlots.MaxCount = Mathf.Max(maxAttractCharges, maxRepelCharges);
 
         // 初始额度为零，需要拾取道具才能获得
         AttractCharges = 0;
@@ -102,13 +108,13 @@ public class AnchorManager : MonoBehaviour
             RepelCharges = Mathf.Min(RepelCharges + gameEvent.ChargeAmount, maxRepelCharges);
         }
 
-        selectedMode = gameEvent.Mode;
+        SelectedMode = gameEvent.Mode;
     }
 
     // 获取当前模式可用额度
     private int GetRemainingCharges()
     {
-        return selectedMode == AnchorMode.Attract
+        return SelectedMode == AnchorMode.Attract
             ? AttractCharges
             : RepelCharges;
     }
@@ -116,7 +122,7 @@ public class AnchorManager : MonoBehaviour
     // 扣除当前模式额度
     private void SpendCharge()
     {
-        if (selectedMode == AnchorMode.Attract)
+        if (SelectedMode == AnchorMode.Attract)
             AttractCharges -= placementCost;
         else
             RepelCharges -= placementCost;
@@ -125,7 +131,7 @@ public class AnchorManager : MonoBehaviour
     // 根据当前模式获取对应 Prefab
     private Anchor GetActivePrefab()
     {
-        return selectedMode == AnchorMode.Attract
+        return SelectedMode == AnchorMode.Attract
             ? attractAnchorPrefab
             : repelAnchorPrefab;
     }
@@ -144,10 +150,10 @@ public class AnchorManager : MonoBehaviour
         // E 键切换模式
         if (Input.GetKeyDown(KeyCode.E))
         {
-            if (selectedMode == AnchorMode.Attract && repelUnlocked)
-                selectedMode = AnchorMode.Repel;
-            else if (selectedMode == AnchorMode.Repel && attractUnlocked)
-                selectedMode = AnchorMode.Attract;
+            if (SelectedMode == AnchorMode.Attract && repelUnlocked)
+                SelectedMode = AnchorMode.Repel;
+            else if (SelectedMode == AnchorMode.Repel && attractUnlocked)
+                SelectedMode = AnchorMode.Attract;
         }
 
         if (Input.GetMouseButtonDown(0))
@@ -195,7 +201,7 @@ public class AnchorManager : MonoBehaviour
             Quaternion.identity
         );
 
-        newAnchor.SetMode(selectedMode);
+        newAnchor.SetMode(SelectedMode);
 
         activeAnchors.Add(newAnchor);
         SpendCharge();
@@ -227,10 +233,10 @@ public class AnchorManager : MonoBehaviour
         activeAnchors.Clear();
 
         // 撤销锚点后自动切枪：当前模式没余额时才切到另一边
-        if (selectedMode == AnchorMode.Attract && AttractCharges == 0 && repelUnlocked && RepelCharges > 0)
-            selectedMode = AnchorMode.Repel;
-        else if (selectedMode == AnchorMode.Repel && RepelCharges == 0 && attractUnlocked && AttractCharges > 0)
-            selectedMode = AnchorMode.Attract;
+        if (SelectedMode == AnchorMode.Attract && AttractCharges == 0 && repelUnlocked && RepelCharges > 0)
+            SelectedMode = AnchorMode.Repel;
+        else if (SelectedMode == AnchorMode.Repel && RepelCharges == 0 && attractUnlocked && AttractCharges > 0)
+            SelectedMode = AnchorMode.Attract;
     }
 
     private Vector2 GetMouseWorldPosition()
@@ -267,7 +273,7 @@ public class AnchorManager : MonoBehaviour
     // 可绑定 UI 按钮
     public void SelectAttract()
     {
-        selectedMode = AnchorMode.Attract;
+        SelectedMode = AnchorMode.Attract;
     }
 
     public void SelectRepel()
@@ -275,6 +281,6 @@ public class AnchorManager : MonoBehaviour
         if (!repelUnlocked)
             return;
 
-        selectedMode = AnchorMode.Repel;
+        SelectedMode = AnchorMode.Repel;
     }
 }
