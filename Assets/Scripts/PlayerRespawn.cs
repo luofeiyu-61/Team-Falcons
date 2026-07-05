@@ -2,35 +2,35 @@ using UnityEngine;
 
 public class PlayerRespawn : MonoBehaviour
 {
-    [Header("玩家刚体")]
+    [Header("Player Rigidbody")]
     [SerializeField] private Rigidbody2D playerRb;
 
-    [Header("死亡时需要禁用的控制脚本")]
+    [Header("Control Scripts")]
     [SerializeField] private MonoBehaviour[] controlScripts;
+
+    public bool IsDead { get; private set; }
 
     private void Awake()
     {
         if (playerRb == null)
-        {
             playerRb = GetComponent<Rigidbody2D>();
-        }
     }
 
-    // 玩家死亡后：禁止操作，但保留重力让角色落回地面
     public void EnterDeadState()
     {
+        IsDead = true;
         SetControlEnabled(false);
 
-        if (playerRb != null)
-        {
-            playerRb.velocity = new Vector2(0f, playerRb.velocity.y);
-            playerRb.angularVelocity = 0f;
-        }
+        if (playerRb == null)
+            return;
+
+        playerRb.velocity = Vector2.zero;
+        playerRb.angularVelocity = 0f;
     }
 
-    // 关卡控制器调用：让玩家从指定位置重生
     public void RespawnAt(Vector2 position)
     {
+        IsDead = false;
         transform.position = position;
 
         if (playerRb != null)
@@ -44,9 +44,9 @@ public class PlayerRespawn : MonoBehaviour
         SetControlEnabled(true);
     }
 
-    // 通关后冻结玩家
     public void FreezePlayer()
     {
+        IsDead = true;
         SetControlEnabled(false);
 
         if (playerRb != null)
@@ -62,9 +62,7 @@ public class PlayerRespawn : MonoBehaviour
         foreach (MonoBehaviour script in controlScripts)
         {
             if (script != null)
-            {
                 script.enabled = enabled;
-            }
         }
     }
 }

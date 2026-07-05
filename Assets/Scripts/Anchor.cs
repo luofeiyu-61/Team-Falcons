@@ -235,6 +235,8 @@ public class Anchor : MonoBehaviour
                 continue;
 
             Rigidbody2D body = target.attachedRigidbody;
+            if (body != null && IsDeadPlayer(body))
+                continue;
 
             if (body == null)
                 continue;
@@ -271,6 +273,12 @@ public class Anchor : MonoBehaviour
             if (body.velocity.magnitude > maxTargetSpeed)
                 body.velocity = body.velocity.normalized * maxTargetSpeed;
         }
+    }
+
+    private static bool IsDeadPlayer(Rigidbody2D body)
+    {
+        PlayerRespawn playerRespawn = body.GetComponent<PlayerRespawn>();
+        return playerRespawn != null && playerRespawn.IsDead;
     }
 
     private void OnDrawGizmosSelected()
