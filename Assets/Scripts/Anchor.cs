@@ -27,12 +27,13 @@ public class Anchor : MonoBehaviour
     [SerializeField] private float minDistance = 0.2f;
     [SerializeField] private LayerMask targetLayer;
 
-    [Header("速度上限")]
-    [Tooltip("受力物体最大速度，防止高速穿墙")]
-    [SerializeField] private float maxTargetSpeed = 25f;
     [Header("黑洞中心")]
     [SerializeField, Min(0f)] private float blackHoleWorldScale = 0.15f;
     [SerializeField, Min(0f)] private float blackHoleTriggerRadius = 2f;
+
+    [Header("速度上限")]
+    [Tooltip("受力物体最大速度，防止高速穿墙")]
+    [SerializeField] private float maxTargetSpeed = 25f;
 
     private readonly HashSet<Rigidbody2D> processedBodies = new();
 
