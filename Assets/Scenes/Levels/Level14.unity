@@ -3387,6 +3387,10 @@ PrefabInstance:
       propertyPath: dropDistance
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 3004684543096429421, guid: b70f5705a1fda114b883745ec1a627aa, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: b10a6f83703db9942b74d5f7749b591c, type: 3}
     - target: {fileID: 3004684543096429423, guid: b70f5705a1fda114b883745ec1a627aa, type: 3}
       propertyPath: m_Name
       value: DropPlatform
@@ -3666,6 +3670,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1228423115}
   - component: {fileID: 1228423114}
+  - component: {fileID: 1228423116}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -3731,6 +3736,14 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!81 &1228423116
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1228423113}
+  m_Enabled: 1
 --- !u!1 &1430979328
 GameObject:
   m_ObjectHideFlags: 0
@@ -3927,6 +3940,10 @@ PrefabInstance:
       propertyPath: m_Offset.y
       value: 0.054436505
       objectReference: {fileID: 0}
+    - target: {fileID: 1860263444887761693, guid: 109d6f2d8bcd2394a99a9f417e1391c9, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: fdceed4a972fa5b429f2e33a55912c06, type: 3}
     - target: {fileID: 1860263444887761694, guid: 109d6f2d8bcd2394a99a9f417e1391c9, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -4128,6 +4145,10 @@ PrefabInstance:
       propertyPath: m_Offset.y
       value: 0.052704692
       objectReference: {fileID: 0}
+    - target: {fileID: 1860263444887761693, guid: 109d6f2d8bcd2394a99a9f417e1391c9, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 15d0ee477579d714980588f73ebbad0d, type: 3}
     - target: {fileID: 1860263444887761694, guid: 109d6f2d8bcd2394a99a9f417e1391c9, type: 3}
       propertyPath: m_RootOrder
       value: 10
@@ -4336,6 +4357,10 @@ PrefabInstance:
       propertyPath: dropDistance
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 3004684543096429421, guid: b70f5705a1fda114b883745ec1a627aa, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 0c081ae209a509f4fb25d5bc259461b8, type: 3}
     - target: {fileID: 3004684543096429423, guid: b70f5705a1fda114b883745ec1a627aa, type: 3}
       propertyPath: m_Name
       value: DropPlatform (2)

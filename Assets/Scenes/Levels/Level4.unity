@@ -2019,7 +2019,7 @@ GameObject:
   - component: {fileID: 1631761400}
   - component: {fileID: 1631761399}
   - component: {fileID: 1631761401}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Tilemap
   m_TagString: Ground
   m_Icon: {fileID: 0}
