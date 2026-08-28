@@ -154,9 +154,9 @@ public class AnchorManager : MonoBehaviour
         // E 键切换模式
         if (Input.GetKeyDown(KeyCode.E))
         {
-            if (SelectedMode == AnchorMode.Attract && repelUnlocked)
+            if (SelectedMode == AnchorMode.Attract && repelCharges != 0 && repelUnlocked)
                 SelectedMode = AnchorMode.Repel;
-            else if (SelectedMode == AnchorMode.Repel && attractUnlocked)
+            else if (SelectedMode == AnchorMode.Repel && attractCharges != 0 && attractUnlocked)
                 SelectedMode = AnchorMode.Attract;
         }
 

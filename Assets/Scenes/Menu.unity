@@ -651,7 +651,6 @@ MonoBehaviour:
   - 190
   - 190
   - 190
-  - -190
   center: {fileID: 826900696}
   appearDelay: 0.05
   appearDuration: 0.5

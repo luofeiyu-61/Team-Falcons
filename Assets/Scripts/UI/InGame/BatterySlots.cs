@@ -115,7 +115,7 @@ namespace UI.InGame
 
         private void Update()
         {
-            if (!Application.isPlaying)
+            /*if (!Application.isPlaying)
                 return;
 
             if (Input.GetKeyDown(KeyCode.I))
@@ -133,7 +133,7 @@ namespace UI.InGame
             else if (Input.GetKeyDown(KeyCode.K))
             {
                 RedCount--;
-            }
+            }*/
         }
 
         public void HandleInputSelection(AnchorMode mode)
